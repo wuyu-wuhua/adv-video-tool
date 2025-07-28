@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -8,6 +8,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Label } from '@/components/ui/label'
 import { Send, CheckCircle, AlertCircle } from 'lucide-react'
+import { submitDemandForm, initDatabase, type DemandFormData } from '@/lib/api-utils'
 
 interface FormData {
   name: string
@@ -38,6 +39,19 @@ export default function DemandForm() {
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [submitMessage, setSubmitMessage] = useState('')
+
+  // 组件挂载时初始化数据库
+  useEffect(() => {
+    const initializeDb = async () => {
+      try {
+        await initDatabase()
+      } catch (error) {
+        console.error('Database initialization failed:', error)
+      }
+    }
+    initializeDb()
+  }, [])
 
   const challengeOptions = [
     '制作成本高',
@@ -92,19 +106,45 @@ export default function DemandForm() {
     
     if (!formData.email) {
       setSubmitStatus('error')
+      setSubmitMessage('请填写邮箱地址')
       return
     }
 
     setIsSubmitting(true)
+    setSubmitStatus('idle')
     
     try {
-      // 模拟 API 调用
-      await new Promise(resolve => setTimeout(resolve, 2000))
+      // 处理"其他"选项
+      const processedChallenges = formData.challenges.includes('其他') && formData.otherChallenges
+        ? [...formData.challenges.filter(c => c !== '其他'), formData.otherChallenges]
+        : formData.challenges.filter(c => c !== '其他')
+
+      const processedVideoTypes = formData.videoTypes.includes('其他') && formData.otherVideoTypes
+        ? [...formData.videoTypes.filter(v => v !== '其他'), formData.otherVideoTypes]
+        : formData.videoTypes.filter(v => v !== '其他')
+
+      const processedBenefits = formData.benefits.includes('其他') && formData.otherBenefits
+        ? [...formData.benefits.filter(b => b !== '其他'), formData.otherBenefits]
+        : formData.benefits.filter(b => b !== '其他')
       
-      // 这里将来会集成 Supabase
-      console.log('Form data:', formData)
+      // 准备提交数据
+      const submitData: DemandFormData = {
+        name: formData.name || undefined,
+        email: formData.email,
+        challenges: processedChallenges.length > 0 ? processedChallenges : undefined,
+        videoTypes: processedVideoTypes.length > 0 ? processedVideoTypes : undefined,
+        benefits: processedBenefits.length > 0 ? processedBenefits : undefined,
+        budget: formData.budget || undefined,
+        interestInTrial: formData.trialInterest === 'yes'
+      }
+
+      // 提交到后端API
+      const result = await submitDemandForm(submitData)
       
+      if (result.success) {
       setSubmitStatus('success')
+        setSubmitMessage(result.message)
+        // 重置表单
       setFormData({
         name: '',
         email: '',
@@ -117,8 +157,14 @@ export default function DemandForm() {
         otherVideoTypes: '',
         otherBenefits: ''
       })
+      } else {
+        setSubmitStatus('error')
+        setSubmitMessage(result.message)
+      }
     } catch (error) {
+      console.error('Form submission error:', error)
       setSubmitStatus('error')
+      setSubmitMessage('提交失败，请稍后重试')
     } finally {
       setIsSubmitting(false)
     }
@@ -313,14 +359,14 @@ export default function DemandForm() {
             {submitStatus === 'success' && (
               <div className="flex items-center justify-center space-x-2 text-green-600 bg-green-50 p-4 rounded-lg">
                 <CheckCircle className="w-5 h-5" />
-                <span>感谢您的反馈！我们已收到您的需求，并将尽快与您联系。</span>
+                <span>{submitMessage}</span>
               </div>
             )}
 
             {submitStatus === 'error' && (
               <div className="flex items-center justify-center space-x-2 text-red-600 bg-red-50 p-4 rounded-lg">
                 <AlertCircle className="w-5 h-5" />
-                <span>提交失败，请检查必填字段并重试。</span>
+                <span>{submitMessage}</span>
               </div>
             )}
           </form>
