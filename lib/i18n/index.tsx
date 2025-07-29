@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, useState, ReactNode } from 'react'
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
 import { LanguageContextType, Language, DEFAULT_LANGUAGE } from './types'
 import { translations } from './translations'
 
@@ -44,7 +44,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   }
 
   // 初始化语言设置
-  useState(() => {
+  useEffect(() => {
     if (typeof window !== 'undefined') {
       const savedLanguage = localStorage.getItem('preferred-language') as Language
       if (savedLanguage && ['en', 'zh'].includes(savedLanguage)) {
@@ -52,7 +52,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
         document.documentElement.lang = savedLanguage
       }
     }
-  })
+  }, [])
 
   const contextValue: LanguageContextType = {
     language,
