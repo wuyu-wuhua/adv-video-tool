@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabase'
+import { createClient } from '@/lib/supabase'
 
 export async function GET() {
   try {
@@ -22,6 +22,7 @@ export async function GET() {
     }
 
     // 测试数据库连接
+    const supabase = createClient()
     const { data, error } = await supabase
       .from('demands')
       .select('count')
