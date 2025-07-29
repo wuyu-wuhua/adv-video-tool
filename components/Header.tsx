@@ -12,7 +12,8 @@ export default function Header() {
   }
 
   const toggleLanguage = () => {
-    setLanguage(language === 'en' ? 'zh' : 'en')
+    const newLanguage = language === 'en' ? 'zh' : 'en'
+    setLanguage(newLanguage)
   }
 
   return (

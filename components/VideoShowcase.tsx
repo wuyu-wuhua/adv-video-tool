@@ -17,66 +17,70 @@ interface VideoSample {
 
 export default function VideoShowcase() {
   const { t } = useLanguage()
+  
+  // 视频播放状态管理
   const [playingVideo, setPlayingVideo] = useState<string | null>(null)
   const [muted, setMuted] = useState<{ [key: string]: boolean }>({})
 
+  // 视频样本数据
   const videoSamples: VideoSample[] = [
     {
       id: '1',
       title: t('video1.title'),
       description: t('video1.description'),
-      duration: '20s',
+      duration: '10s',
       category: t('video1.category'),
-      thumbnail: '/api/placeholder/400/225',
+      thumbnail: '/img/1.jpg',
       videoUrl: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4'
     },
     {
       id: '2',
       title: t('video2.title'),
       description: t('video2.description'),
-      duration: '15s',
+      duration: '10s',
       category: t('video2.category'),
-      thumbnail: '/api/placeholder/400/225',
+      thumbnail: '/img/2.jpg',
       videoUrl: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_2mb.mp4'
     },
     {
       id: '3',
       title: t('video3.title'),
       description: t('video3.description'),
-      duration: '30s',
+      duration: '10s',
       category: t('video3.category'),
-      thumbnail: '/api/placeholder/400/225',
+      thumbnail: '/img/3.jpg',
       videoUrl: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_5mb.mp4'
     },
     {
       id: '4',
       title: t('video4.title'),
       description: t('video4.description'),
-      duration: '25s',
+      duration: '10s',
       category: t('video4.category'),
-      thumbnail: '/api/placeholder/400/225',
+      thumbnail: '/img/4.jpg',
       videoUrl: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4'
     },
     {
       id: '5',
       title: t('video5.title'),
       description: t('video5.description'),
-      duration: '15s',
+      duration: '10s',
       category: t('video5.category'),
-      thumbnail: '/api/placeholder/400/225',
+      thumbnail: '/img/5.jpg',
       videoUrl: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_2mb.mp4'
     },
     {
       id: '6',
       title: t('video6.title'),
       description: t('video6.description'),
-      duration: '45s',
+      duration: '10s',
       category: t('video6.category'),
-      thumbnail: '/api/placeholder/400/225',
+      thumbnail: '/img/6.jpg',
       videoUrl: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_5mb.mp4'
     }
   ]
 
+  // 视频控制函数
   const handleVideoPlay = (videoId: string) => {
     setPlayingVideo(videoId)
     // 停止其他视频
@@ -110,6 +114,18 @@ export default function VideoShowcase() {
     }
   }
 
+  // 视频播放/暂停切换
+  const handleVideoToggle = (videoId: string) => {
+    const video = document.getElementById(`video-${videoId}`) as HTMLVideoElement
+    if (video) {
+      if (playingVideo === videoId) {
+        video.pause()
+      } else {
+        video.play()
+      }
+    }
+  }
+
   return (
     <section id="showcase" className="py-20 px-4">
       <div className="container mx-auto">
@@ -123,15 +139,15 @@ export default function VideoShowcase() {
           </p>
         </div>
 
-        {/* 视频网格 */}
+        {/* 视频展示网格 */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {videoSamples.map((sample) => (
             <div key={sample.id} className="group bg-white/80 backdrop-blur-sm rounded-2xl overflow-hidden card-hover">
-              {/* 视频容器 */}
-              <div className="relative aspect-video bg-gray-100">
+              {/* 视频播放区域 */}
+              <div className="relative aspect-video bg-gray-100 overflow-hidden rounded-t-2xl">
                 <video
                   id={`video-${sample.id}`}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                   poster={sample.thumbnail}
                   muted={muted[sample.id] || true}
                   loop
@@ -143,22 +159,13 @@ export default function VideoShowcase() {
                 </video>
 
                 {/* 视频控制按钮 */}
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                  <div className="flex space-x-2">
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="flex space-x-3">
                     <Button
                       size="sm"
                       variant="secondary"
-                      className="bg-black/50 text-white hover:bg-black/70"
-                      onClick={() => {
-                        const video = document.getElementById(`video-${sample.id}`) as HTMLVideoElement
-                        if (video) {
-                          if (playingVideo === sample.id) {
-                            video.pause()
-                          } else {
-                            video.play()
-                          }
-                        }
-                      }}
+                      className="bg-black/60 text-white hover:bg-black/80 backdrop-blur-sm"
+                      onClick={() => handleVideoToggle(sample.id)}
                     >
                       {playingVideo === sample.id ? (
                         <Pause className="w-4 h-4" />
@@ -169,7 +176,7 @@ export default function VideoShowcase() {
                     <Button
                       size="sm"
                       variant="secondary"
-                      className="bg-black/50 text-white hover:bg-black/70"
+                      className="bg-black/60 text-white hover:bg-black/80 backdrop-blur-sm"
                       onClick={() => toggleMute(sample.id)}
                     >
                       {muted[sample.id] ? (
@@ -181,7 +188,7 @@ export default function VideoShowcase() {
                     <Button
                       size="sm"
                       variant="secondary"
-                      className="bg-black/50 text-white hover:bg-black/70"
+                      className="bg-black/60 text-white hover:bg-black/80 backdrop-blur-sm"
                       onClick={() => toggleFullscreen(sample.id)}
                     >
                       <Maximize2 className="w-4 h-4" />
@@ -190,17 +197,17 @@ export default function VideoShowcase() {
                 </div>
 
                 {/* 时长标签 */}
-                <div className="absolute top-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded">
+                <div className="absolute top-3 right-3 bg-black/70 text-white text-xs px-2 py-1 rounded-md backdrop-blur-sm">
                   {sample.duration}
                 </div>
 
                 {/* 分类标签 */}
-                <div className="absolute top-2 left-2 bg-blue-600 text-white text-xs px-2 py-1 rounded">
+                <div className="absolute top-3 left-3 bg-blue-600/90 text-white text-xs px-2 py-1 rounded-md backdrop-blur-sm">
                   {sample.category}
                 </div>
               </div>
 
-              {/* 视频信息 */}
+              {/* 视频信息展示 */}
               <div className="p-6">
                 <h3 className="text-xl font-bold text-gray-800 mb-2">
                   {sample.title}
@@ -213,7 +220,7 @@ export default function VideoShowcase() {
           ))}
         </div>
 
-        {/* 说明文字 */}
+        {/* 合规说明 */}
         <div className="mt-16 text-center">
           <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-8 max-w-4xl mx-auto">
             <h3 className="text-2xl font-bold text-gray-800 mb-4">

@@ -89,34 +89,34 @@ const translations = {
     
     // Video Samples
     video1: {
-      title: 'E-commerce Product Showcase',
-      description: 'Highlighting product features and usage scenarios, suitable for e-commerce platform promotion',
-      category: 'E-commerce'
+      title: 'Multimodal AI',
+      description: 'Text, image, and voice integrated generation model supporting cross-modal content creation',
+      category: 'AI Model'
     },
     video2: {
-      title: 'Brand Story Short',
-      description: 'Telling brand philosophy and values, building emotional connections',
-      category: 'Brand'
+      title: 'Smart Prediction',
+      description: 'Automated machine learning platform for rapid predictive model building and deployment',
+      category: 'Machine Learning'
     },
     video3: {
-      title: 'Promotional Campaign',
-      description: 'Highlighting promotional information and urgency, stimulating user action',
-      category: 'Promotion'
+      title: 'Voice Synthesis',
+      description: 'High-quality AI voice generation with natural and fluent text-to-speech technology',
+      category: 'Voice AI'
     },
     video4: {
-      title: 'User Testimonial',
-      description: 'Real users sharing usage experiences, enhancing trust',
-      category: 'Testimonial'
+      title: 'Collaborative Office',
+      description: 'Integrated work platform with seamless document management and project collaboration',
+      category: 'Productivity'
     },
     video5: {
-      title: 'Social Media Short Video',
-      description: 'Vertical short video format suitable for various platform distribution',
-      category: 'Social'
+      title: 'Smart Writing',
+      description: 'AI-driven copywriting assistant for professional marketing content generation',
+      category: 'Writing AI'
     },
     video6: {
-      title: 'Animated Explanation',
-      description: 'Visual explanation of complex concepts, easy to understand',
-      category: 'Education'
+      title: '3D Rendering',
+      description: 'Professional 3D design tool for rapid indoor and outdoor scene modeling and rendering',
+      category: 'Design Tool'
     },
     
     // Showcase Compliance
@@ -281,34 +281,34 @@ const translations = {
     
     // Video Samples
     video1: {
-      title: '电商产品展示',
-      description: '突出产品特性和使用场景，适合电商平台推广',
-      category: '电商'
+      title: '多模态AI',
+      description: '文本、图像、语音一体化生成模型，支持跨模态内容创作',
+      category: 'AI模型'
     },
     video2: {
-      title: '品牌故事短片',
-      description: '讲述品牌理念和价值观，建立情感连接',
-      category: '品牌'
+      title: '智能预测',
+      description: '自动化机器学习平台，快速构建和部署预测模型',
+      category: '机器学习'
     },
     video3: {
-      title: '促销活动宣传',
-      description: '突出优惠信息和限时性，刺激用户行动',
-      category: '促销'
+      title: '语音合成',
+      description: '高质量AI语音生成，自然流畅的文本转语音技术',
+      category: '语音AI'
     },
     video4: {
-      title: '用户证言视频',
-      description: '真实用户分享使用体验，增强信任度',
-      category: '证言'
+      title: '协作办公',
+      description: '一体化工作平台，文档管理与项目协作无缝集成',
+      category: '生产力'
     },
     video5: {
-      title: '社交媒体短视频',
-      description: '适合各平台传播的竖屏短视频格式',
-      category: '社交'
+      title: '智能写作',
+      description: 'AI驱动的文案创作助手，专业营销内容一键生成',
+      category: '写作AI'
     },
     video6: {
-      title: '动画解释视频',
-      description: '复杂概念的可视化解释，易于理解',
-      category: '教育'
+      title: '3D渲染',
+      description: '专业级3D设计工具，室内外场景快速建模渲染',
+      category: '设计工具'
     },
     
     // Showcase Compliance
@@ -420,8 +420,13 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     return typeof value === 'string' ? value : key
   }
 
+  // 语言切换函数
+  const handleLanguageChange = (newLanguage: 'en' | 'zh') => {
+    setLanguage(newLanguage)
+  }
+
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+    <LanguageContext.Provider value={{ language, setLanguage: handleLanguageChange, t }}>
       {children}
     </LanguageContext.Provider>
   )
