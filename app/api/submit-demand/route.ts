@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getSupabaseClient, initializeDatabase } from '@/lib/supabase'
+import { createAdminClient, initializeDatabase } from '@/lib/supabase'
 import { validateDemandForm, transformFormDataToDatabase } from '@/lib/validation'
 import { handleDatabaseError, handleValidationError, handleUnknownError, formatErrorResponse } from '@/lib/error-handler'
 
@@ -35,16 +35,7 @@ export async function POST(request: NextRequest) {
     const databaseData = transformFormDataToDatabase(validation.data!)
 
     // 获取Service Role客户端
-    const supabaseAdmin = getSupabaseClient(true)
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        formatErrorResponse({
-          code: 'SERVICE_KEY_MISSING',
-          message: 'Service Role Key not configured'
-        }),
-        { status: 500 }
-      )
-    }
+    const supabaseAdmin = createAdminClient()
 
     // 检查邮箱是否已存在
     const { data: existingDemand } = await supabaseAdmin
