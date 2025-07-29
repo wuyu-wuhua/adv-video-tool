@@ -1,17 +1,23 @@
 import { createBrowserClient } from '@supabase/ssr'
+import { Demand, DatabaseError } from './types'
+import { ERROR_MESSAGES } from '@/lib/core/constants'
 
+// 环境变量配置
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
 
 // 创建浏览器客户端
 export function createClient() {
+  if (!supabaseUrl || !supabaseAnonKey) {
+    throw new Error('Supabase environment variables are not configured')
+  }
   return createBrowserClient(supabaseUrl, supabaseAnonKey)
 }
 
 // 创建管理员客户端（用于API路由）
 export function createAdminClient() {
-  if (!supabaseServiceKey) {
+  if (!supabaseUrl || !supabaseServiceKey) {
     throw new Error('SUPABASE_SERVICE_ROLE_KEY is not configured')
   }
   return createBrowserClient(supabaseUrl, supabaseServiceKey)
@@ -23,19 +29,6 @@ export function getSupabaseClient(useAdmin = false) {
     return createAdminClient()
   }
   return createClient()
-}
-
-// 数据库表结构定义
-export interface Demand {
-  id?: string
-  name?: string
-  email: string
-  challenges?: string[]
-  video_types?: string[]
-  benefits?: string[]
-  budget?: string
-  interest_in_trial?: boolean
-  created_at?: string
 }
 
 // 检查表是否存在
@@ -255,5 +248,73 @@ export async function initializeDatabase(): Promise<boolean> {
   } catch (error) {
     console.error('❌ Database initialization failed:', error)
     return false
+  }
+}
+
+// 数据库操作工具函数
+export class DatabaseService {
+  private supabase = createAdminClient()
+
+  // 插入需求数据
+  async insertDemand(demand: Demand) {
+    try {
+      const { data, error } = await this.supabase
+        .from('demands')
+        .insert([demand])
+        .select()
+        .single()
+
+      if (error) {
+        throw new Error(error.message)
+      }
+
+      return { success: true, data }
+    } catch (error) {
+      return { 
+        success: false, 
+        error: error instanceof Error ? error.message : ERROR_MESSAGES.SERVER_ERROR 
+      }
+    }
+  }
+
+  // 检查邮箱是否存在
+  async checkEmailExists(email: string) {
+    try {
+      const { data, error } = await this.supabase
+        .from('demands')
+        .select('id')
+        .eq('email', email)
+        .single()
+
+      if (error && error.code === 'PGRST116') {
+        return { exists: false }
+      }
+
+      return { exists: !!data }
+    } catch (error) {
+      return { exists: false }
+    }
+  }
+
+  // 获取需求列表
+  async getDemands(limit = 10, offset = 0) {
+    try {
+      const { data, error, count } = await this.supabase
+        .from('demands')
+        .select('*', { count: 'exact' })
+        .order('created_at', { ascending: false })
+        .range(offset, offset + limit - 1)
+
+      if (error) {
+        throw new Error(error.message)
+      }
+
+      return { success: true, data, count }
+    } catch (error) {
+      return { 
+        success: false, 
+        error: error instanceof Error ? error.message : ERROR_MESSAGES.SERVER_ERROR 
+      }
+    }
   }
 } 

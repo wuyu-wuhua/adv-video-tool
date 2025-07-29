@@ -8,7 +8,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Label } from '@/components/ui/label'
 import { Send, CheckCircle, AlertCircle } from 'lucide-react'
-import { submitDemandForm, initDatabase, type DemandFormData } from '@/lib/api-utils'
+import { submitDemandForm, initDatabase, type DemandFormData } from '@/lib/api/utils'
 import { useLanguage } from '@/lib/i18n'
 
 interface FormData {
@@ -139,7 +139,7 @@ export default function DemandForm() {
       
       if (result.success) {
       setSubmitStatus('success')
-        setSubmitMessage(result.message)
+        setSubmitMessage(result.message || '')
         // 重置表单
       setFormData({
         name: '',
@@ -155,7 +155,7 @@ export default function DemandForm() {
       })
       } else {
         setSubmitStatus('error')
-        setSubmitMessage(result.message)
+        setSubmitMessage(result.message || '')
       }
     } catch (error) {
       console.error('Form submission error:', error)

@@ -1,9 +1,7 @@
-'use client'
-
-import { createContext, useContext, useState, ReactNode } from 'react'
+import { Translations } from './types'
 
 // 翻译文本定义
-const translations = {
+export const translations: Translations = {
   en: {
     // Header
     home: 'Home',
@@ -185,7 +183,7 @@ const translations = {
     benefitsOptions: {
       efficiency: 'Improve efficiency',
       quality: 'Better quality',
-      cost: 'Reduce cost',
+      cost: 'Reduce costs',
       time: 'Save time',
       other: 'Other'
     },
@@ -205,45 +203,45 @@ const translations = {
     startUsing: '开始使用',
     
     // Hero Section
-    heroTitle: '我们是只生成谷歌广告的视频素材',
-    heroSubtitle: '使用先进AI技术将您的想法转化为精彩视频',
-    heroDescription: '告别高成本、低效率，让 AI 为您打造专属广告视频，驱动更高转化！',
+    heroTitle: 'AI驱动的谷歌广告视频制作工具',
+    heroSubtitle: '用先进的AI技术将您的想法转化为令人惊艳的视频',
+    heroDescription: '告别高成本、低效率，让AI为您打造专属广告视频，驱动更高转化！',
     heroButton: '查看样本视频',
     heroSubButton: '观看演示',
     heroTechNote: '🚀 基于 Runway Gen-4 技术，生成符合谷歌广告规范的高质量视频素材',
     
     // Features Section
-    featuresTitle: '为什么选择我们的 AI 视频工具？',
-    featuresSubtitle: '我们解决了传统广告视频制作的所有痛点，让您专注于业务增长',
+    featuresTitle: '为什么选择我们的AI视频工具？',
+    featuresSubtitle: '我们解决传统广告视频制作的所有痛点，让您专注于业务增长',
     aiGeneration: 'AI生成',
     aiGenerationDesc: '使用先进AI从文本描述生成视频',
     templates: '丰富模板',
-    templatesDesc: '数百个专业模板供您选择',
+    templatesDesc: '数百个专业模板供选择',
     editing: '智能编辑',
-    editingDesc: '智能编辑工具，获得完美效果',
+    editingDesc: '智能编辑工具，完美效果',
     export: '高质量导出',
     exportDesc: '多种格式高质量导出',
     
     // Feature Cards
     feature1: {
       title: '高转化素材',
-      description: '基于数据驱动的 AI 算法，生成符合用户心理的高转化率视频素材'
+      description: '数据驱动的AI算法生成匹配用户心理的高转化视频素材'
     },
     feature2: {
       title: '成本效益',
-      description: '相比传统视频制作，成本降低 90%，同时保持专业品质'
+      description: '相比传统视频制作，成本降低90%，同时保持专业品质'
     },
     feature3: {
-      title: '极速迭代',
-      description: '从创意到成品仅需数小时，支持快速 A/B 测试和优化'
+      title: '快速迭代',
+      description: '从概念到成品仅需数小时，支持快速A/B测试和优化'
     },
     feature4: {
       title: '品牌一致性',
-      description: '智能保持品牌调性和视觉风格，确保所有素材的统一性'
+      description: '智能维护品牌调性和视觉风格，确保所有素材的一致性'
     },
     feature5: {
-      title: '精准定位',
-      description: '根据目标受众特征，自动调整视频风格和内容策略'
+      title: '精准定向',
+      description: '根据目标受众特征自动调整视频风格和内容策略'
     },
     feature6: {
       title: '合规保障',
@@ -253,7 +251,7 @@ const translations = {
     // Stats
     stats: {
       cases: '成功案例',
-      industries: '行业覆盖',
+      industries: '覆盖行业',
       satisfaction: '客户满意度',
       delivery: '交付时间'
     },
@@ -263,7 +261,7 @@ const translations = {
       title: '技术优势',
       data: {
         title: '数据驱动',
-        description: '基于百万级广告数据训练'
+        description: '基于数百万广告数据点训练'
       },
       optimization: {
         title: '精准优化',
@@ -271,7 +269,7 @@ const translations = {
       },
       security: {
         title: '安全可靠',
-        description: '企业级安全保障'
+        description: '企业级安全防护'
       }
     },
     
@@ -388,55 +386,4 @@ const translations = {
       enterprise: '1000美元以上'
     }
   }
-}
-
-// 语言上下文类型
-interface LanguageContextType {
-  language: 'en' | 'zh'
-  setLanguage: (lang: 'en' | 'zh') => void
-  t: (key: string) => string
-}
-
-// 创建语言上下文
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
-
-// 语言提供者组件
-export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguage] = useState<'en' | 'zh'>('en')
-
-  // 翻译函数
-  const t = (key: string): string => {
-    const keys = key.split('.')
-    let value: any = translations[language]
-    
-    for (const k of keys) {
-      if (value && typeof value === 'object' && k in value) {
-        value = value[k]
-      } else {
-        return key // 如果找不到翻译，返回原键
-      }
-    }
-    
-    return typeof value === 'string' ? value : key
-  }
-
-  // 语言切换函数
-  const handleLanguageChange = (newLanguage: 'en' | 'zh') => {
-    setLanguage(newLanguage)
-  }
-
-  return (
-    <LanguageContext.Provider value={{ language, setLanguage: handleLanguageChange, t }}>
-      {children}
-    </LanguageContext.Provider>
-  )
-}
-
-// 使用语言上下文的Hook
-export function useLanguage() {
-  const context = useContext(LanguageContext)
-  if (context === undefined) {
-    throw new Error('useLanguage must be used within a LanguageProvider')
-  }
-  return context
 } 

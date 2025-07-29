@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createAdminClient, initializeDatabase } from '@/lib/supabase'
-import { validateDemandForm, transformFormDataToDatabase } from '@/lib/validation'
-import { handleDatabaseError, handleValidationError, handleUnknownError, formatErrorResponse } from '@/lib/error-handler'
+import { createAdminClient, initializeDatabase } from '@/lib/database/supabase'
+import { validateDemandForm, transformFormDataToDatabase } from '@/lib/api/validation'
+import { handleDatabaseError, handleValidationError, handleUnknownError, formatErrorResponse } from '@/lib/api/error-handler'
 
 // 初始化数据库（仅在第一次调用时执行）
 let isDatabaseInitialized = false
