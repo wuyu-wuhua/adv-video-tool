@@ -9,6 +9,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Label } from '@/components/ui/label'
 import { Send, CheckCircle, AlertCircle } from 'lucide-react'
 import { submitDemandForm, initDatabase, type DemandFormData } from '@/lib/api-utils'
+import { useLanguage } from '@/lib/i18n'
 
 interface FormData {
   name: string
@@ -24,6 +25,8 @@ interface FormData {
 }
 
 export default function DemandForm() {
+  const { t } = useLanguage()
+  
   const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
@@ -54,41 +57,34 @@ export default function DemandForm() {
   }, [])
 
   const challengeOptions = [
-    '制作成本高',
-    '制作周期长',
-    '创意迭代慢',
-    '缺乏高质量素材',
-    '素材与品牌不符',
-    '不确定广告效果',
-    '其他'
+    t('challengesOptions.time'),
+    t('challengesOptions.skills'),
+    t('challengesOptions.cost'),
+    t('challengesOptions.quality'),
+    t('challengesOptions.other')
   ]
 
   const videoTypeOptions = [
-    '产品展示',
-    '品牌宣传',
-    '促销活动',
-    '动画解释',
-    '用户证言',
-    '社交媒体短视频',
-    '其他'
+    t('videoTypesOptions.marketing'),
+    t('videoTypesOptions.training'),
+    t('videoTypesOptions.entertainment'),
+    t('videoTypesOptions.education'),
+    t('videoTypesOptions.other')
   ]
 
   const benefitOptions = [
-    '降低成本',
-    '加快制作速度',
-    '提高创意多样性',
-    '批量生成',
-    '提高广告效果',
-    '操作简单',
-    '其他'
+    t('benefitsOptions.efficiency'),
+    t('benefitsOptions.quality'),
+    t('benefitsOptions.cost'),
+    t('benefitsOptions.time'),
+    t('benefitsOptions.other')
   ]
 
   const budgetOptions = [
-    '$0 - $50',
-    '$51 - $100',
-    '$101 - $200',
-    '$200+',
-    '不确定'
+    t('budgetOptions.low'),
+    t('budgetOptions.medium'),
+    t('budgetOptions.high'),
+    t('budgetOptions.enterprise')
   ]
 
   const handleCheckboxChange = (field: keyof FormData, value: string) => {
@@ -164,7 +160,7 @@ export default function DemandForm() {
     } catch (error) {
       console.error('Form submission error:', error)
       setSubmitStatus('error')
-      setSubmitMessage('提交失败，请稍后重试')
+      setSubmitMessage(t('submitError'))
     } finally {
       setIsSubmitting(false)
     }
@@ -176,10 +172,10 @@ export default function DemandForm() {
         {/* 标题 */}
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-6 gradient-text">
-            告诉我们您的需求
+            {t('formTitle')}
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            填写以下表单，我们将为您提供个性化的 AI 视频解决方案
+            {t('formSubtitle')}
           </p>
         </div>
 
@@ -189,30 +185,30 @@ export default function DemandForm() {
             {/* 基本信息 */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <Label htmlFor="name">姓名/公司名称 (可选)</Label>
+                <Label htmlFor="name">{t('name')} (可选)</Label>
                 <Input
                   id="name"
                   value={formData.name}
                   onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                  placeholder="请输入您的姓名或公司名称"
+                  placeholder={t('namePlaceholder')}
                 />
               </div>
               <div>
-                <Label htmlFor="email">邮箱地址 *</Label>
+                <Label htmlFor="email">{t('email')} *</Label>
                 <Input
                   id="email"
                   type="email"
                   required
                   value={formData.email}
                   onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-                  placeholder="请输入您的邮箱地址"
+                  placeholder={t('emailPlaceholder')}
                 />
               </div>
             </div>
 
             {/* 当前挑战 */}
             <div>
-              <Label className="text-base font-semibold">当前面临的挑战 (多选)</Label>
+              <Label className="text-base font-semibold">{t('challenges')} (多选)</Label>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                 {challengeOptions.map((option) => (
                   <div key={option} className="flex items-center space-x-2">
@@ -227,10 +223,10 @@ export default function DemandForm() {
                   </div>
                 ))}
               </div>
-              {formData.challenges.includes('其他') && (
+              {formData.challenges.includes(t('challengesOptions.other')) && (
                 <Textarea
                   className="mt-4"
-                  placeholder="请详细描述您面临的其他挑战..."
+                  placeholder={t('otherChallengesPlaceholder')}
                   value={formData.otherChallenges}
                   onChange={(e) => setFormData(prev => ({ ...prev, otherChallenges: e.target.value }))}
                 />
@@ -239,7 +235,7 @@ export default function DemandForm() {
 
             {/* 期望视频类型 */}
             <div>
-              <Label className="text-base font-semibold">期望的视频类型 (多选)</Label>
+              <Label className="text-base font-semibold">{t('videoTypes')} (多选)</Label>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                 {videoTypeOptions.map((option) => (
                   <div key={option} className="flex items-center space-x-2">
@@ -254,10 +250,10 @@ export default function DemandForm() {
                   </div>
                 ))}
               </div>
-              {formData.videoTypes.includes('其他') && (
+              {formData.videoTypes.includes(t('videoTypesOptions.other')) && (
                 <Textarea
                   className="mt-4"
-                  placeholder="请描述您期望的其他视频类型..."
+                  placeholder={t('otherVideoTypesPlaceholder')}
                   value={formData.otherVideoTypes}
                   onChange={(e) => setFormData(prev => ({ ...prev, otherVideoTypes: e.target.value }))}
                 />
@@ -266,7 +262,7 @@ export default function DemandForm() {
 
             {/* 期望的 AI 解决方案优势 */}
             <div>
-              <Label className="text-base font-semibold">期望的 AI 解决方案优势 (多选)</Label>
+              <Label className="text-base font-semibold">{t('benefits')} (多选)</Label>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                 {benefitOptions.map((option) => (
                   <div key={option} className="flex items-center space-x-2">
@@ -281,10 +277,10 @@ export default function DemandForm() {
                   </div>
                 ))}
               </div>
-              {formData.benefits.includes('其他') && (
+              {formData.benefits.includes(t('benefitsOptions.other')) && (
                 <Textarea
                   className="mt-4"
-                  placeholder="请描述您期望的其他优势..."
+                  placeholder={t('otherBenefitsPlaceholder')}
                   value={formData.otherBenefits}
                   onChange={(e) => setFormData(prev => ({ ...prev, otherBenefits: e.target.value }))}
                 />
@@ -294,7 +290,7 @@ export default function DemandForm() {
             {/* 预算期望 */}
             <div>
               <Label className="text-base font-semibold">
-                针对 15-30 秒定制视频，您愿意支付的预算？
+                {t('budget')}
               </Label>
               <RadioGroup
                 value={formData.budget}
@@ -315,7 +311,7 @@ export default function DemandForm() {
             {/* 免费试用兴趣 */}
             <div>
               <Label className="text-base font-semibold">
-                是否愿意参与免费试用或一对一访谈？
+                {t('interestInTrial')}
               </Label>
               <RadioGroup
                 value={formData.trialInterest}
@@ -324,11 +320,11 @@ export default function DemandForm() {
               >
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="yes" id="trial-yes" />
-                  <Label htmlFor="trial-yes">是，我愿意参与免费试用或一对一访谈</Label>
+                  <Label htmlFor="trial-yes">{t('trialYes')}</Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="no" id="trial-no" />
-                  <Label htmlFor="trial-no">否，我只想提交我的需求</Label>
+                  <Label htmlFor="trial-no">{t('trialNo')}</Label>
                 </div>
               </RadioGroup>
             </div>
@@ -344,12 +340,12 @@ export default function DemandForm() {
                 {isSubmitting ? (
                   <>
                     <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                    提交中...
+                    {t('submitting')}
                   </>
                 ) : (
                   <>
                     <Send className="w-5 h-5 mr-2" />
-                    提交需求
+                    {t('submit')}
                   </>
                 )}
               </Button>

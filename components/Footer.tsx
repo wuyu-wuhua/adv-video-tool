@@ -1,8 +1,11 @@
 'use client'
 
 import { Video, Mail, Heart } from 'lucide-react'
+import { useLanguage } from '@/lib/i18n'
 
 export default function Footer() {
+  const { t } = useLanguage()
+  
   return (
     <footer className="bg-gray-900 text-white py-12 px-4">
       <div className="container mx-auto">
@@ -14,25 +17,25 @@ export default function Footer() {
               <span className="text-xl font-bold">AI Video Tool</span>
             </div>
             <p className="text-gray-400 leading-relaxed">
-              通过 AI 技术革新广告视频制作，让每个品牌都能拥有专业级的视频素材。
+              {t('footerDescription')}
             </p>
             <div className="flex items-center space-x-2 text-gray-400">
-              <span>Made with</span>
+              <span>{t('madeWith')}</span>
               <Heart className="w-4 h-4 text-red-500" />
-              <span>for creators</span>
+              <span>{t('forCreators')}</span>
             </div>
           </div>
 
           {/* 快速链接 */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold">快速链接</h3>
+            <h3 className="text-lg font-semibold">{t('quickLinks')}</h3>
             <ul className="space-y-2">
               <li>
                 <button 
                   onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                   className="text-gray-400 hover:text-white transition-colors"
                 >
-                  首页
+                  {t('home')}
                 </button>
               </li>
               <li>
@@ -40,7 +43,7 @@ export default function Footer() {
                   onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
                   className="text-gray-400 hover:text-white transition-colors"
                 >
-                  功能特性
+                  {t('features')}
                 </button>
               </li>
               <li>
@@ -48,7 +51,7 @@ export default function Footer() {
                   onClick={() => document.getElementById('showcase')?.scrollIntoView({ behavior: 'smooth' })}
                   className="text-gray-400 hover:text-white transition-colors"
                 >
-                  视频样本
+                  {t('showcase')}
                 </button>
               </li>
               <li>
@@ -56,7 +59,7 @@ export default function Footer() {
                   onClick={() => document.getElementById('form')?.scrollIntoView({ behavior: 'smooth' })}
                   className="text-gray-400 hover:text-white transition-colors"
                 >
-                  提交需求
+                  {t('demand')}
                 </button>
               </li>
             </ul>
@@ -64,7 +67,7 @@ export default function Footer() {
 
           {/* 联系方式 */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold">联系我们</h3>
+            <h3 className="text-lg font-semibold">{t('contactUs')}</h3>
             <div className="space-y-2">
               <div className="flex items-center space-x-2 text-gray-400">
                 <Mail className="w-4 h-4" />
@@ -78,7 +81,7 @@ export default function Footer() {
             </div>
             <div className="pt-4">
               <p className="text-gray-400 text-sm">
-                工作时间：周一至周五 9:00-18:00
+                {t('workingHours')}
               </p>
             </div>
           </div>
@@ -87,19 +90,19 @@ export default function Footer() {
         {/* 版权信息 */}
         <div className="border-t border-gray-800 mt-8 pt-8 text-center">
           <p className="text-gray-400 text-sm">
-            © 2024 AI Video Tool. 保留所有权利。
+            {t('footerText')}
           </p>
           <div className="flex justify-center space-x-4 mt-2 text-xs text-gray-500">
             <a href="#" className="hover:text-gray-400 transition-colors">
-              隐私政策
+              {t('privacyPolicy')}
             </a>
             <span>•</span>
             <a href="#" className="hover:text-gray-400 transition-colors">
-              服务条款
+              {t('termsOfService')}
             </a>
             <span>•</span>
             <a href="#" className="hover:text-gray-400 transition-colors">
-              Cookie 政策
+              {t('cookiePolicy')}
             </a>
           </div>
         </div>

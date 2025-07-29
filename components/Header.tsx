@@ -1,11 +1,18 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { Video, Sparkles } from 'lucide-react'
+import { Video, Sparkles, Globe } from 'lucide-react'
+import { useLanguage } from '@/lib/i18n'
 
 export default function Header() {
+  const { language, setLanguage, t } = useLanguage()
+  
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const toggleLanguage = () => {
+    setLanguage(language === 'en' ? 'zh' : 'en')
   }
 
   return (
@@ -22,20 +29,34 @@ export default function Header() {
           
           <div className="flex items-center space-x-4">
             <Button variant="ghost" onClick={scrollToTop}>
-              首页
+              {t('home')}
             </Button>
             <Button variant="ghost" onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}>
-              功能
+              {t('features')}
             </Button>
             <Button variant="ghost" onClick={() => document.getElementById('showcase')?.scrollIntoView({ behavior: 'smooth' })}>
-              样本
+              {t('showcase')}
             </Button>
             <Button variant="ghost" onClick={() => document.getElementById('form')?.scrollIntoView({ behavior: 'smooth' })}>
-              需求
+              {t('demand')}
             </Button>
+            
+            {/* 语言切换按钮 */}
+            <Button 
+              variant="outline" 
+              onClick={toggleLanguage}
+              className="flex items-center space-x-1 bg-gradient-to-r from-blue-50 to-purple-50 hover:from-blue-100 hover:to-purple-100 border-blue-200 hover:border-blue-300 text-blue-700 hover:text-blue-800 transition-all duration-200 shadow-sm hover:shadow-md"
+              title={language === 'en' ? '切换到中文' : 'Switch to English'}
+            >
+              <Globe className="w-4 h-4" />
+              <span className="text-sm font-medium">
+                {language === 'en' ? 'EN' : '中'}
+              </span>
+            </Button>
+            
             <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white">
               <Sparkles className="w-4 h-4 mr-2" />
-              开始使用
+              {t('startUsing')}
             </Button>
           </div>
         </div>
