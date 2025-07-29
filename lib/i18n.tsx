@@ -13,7 +13,7 @@ const translations = {
     startUsing: 'Get Started',
     
     // Hero Section
-    heroTitle: 'AI-Powered Video Creation Tool',
+    heroTitle: 'Google Ads video creation tool powered by AI',
     heroSubtitle: 'Transform your ideas into stunning videos with advanced AI technology',
     heroDescription: 'Say goodbye to high costs and low efficiency, let AI create exclusive ad videos for you, driving higher conversions!',
     heroButton: 'View Sample Videos',
@@ -205,7 +205,7 @@ const translations = {
     startUsing: '开始使用',
     
     // Hero Section
-    heroTitle: 'AI驱动的视频创作工具',
+    heroTitle: '我们是只生成谷歌广告的视频素材',
     heroSubtitle: '使用先进AI技术将您的想法转化为精彩视频',
     heroDescription: '告别高成本、低效率，让 AI 为您打造专属广告视频，驱动更高转化！',
     heroButton: '查看样本视频',
