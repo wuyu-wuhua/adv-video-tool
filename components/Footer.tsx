@@ -14,7 +14,7 @@ export default function Footer() {
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
               <Video className="w-8 h-8 text-blue-400" />
-              <span className="text-xl font-bold">AI素材工具</span>
+              <span className="text-xl font-bold">AI工具</span>
             </div>
             <p className="text-gray-400 leading-relaxed">
               {t('footerDescription')}
@@ -65,10 +65,10 @@ export default function Footer() {
               <div className="flex items-center space-x-2 text-gray-400">
                 <Mail className="w-4 h-4" />
                 <a 
-                  href="mailto:contact@aimaterialtool.com" 
+                  href="mailto:contact@aitool.com" 
                   className="hover:text-white transition-colors"
                 >
-                  contact@aimaterialtool.com
+                  contact@aitool.com
                 </a>
               </div>
               <p className="text-gray-400 text-sm">

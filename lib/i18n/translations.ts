@@ -10,16 +10,27 @@ export const translations: Translations = {
     demand: 'Demand',
     startUsing: 'Get Started',
     
+    // Login
+    back: 'Back',
+    welcomeBack: 'Welcome Back',
+    chooseLoginMethod: 'Choose your login method',
+    loginWithGitHub: 'Continue with GitHub',
+    loginWithGoogle: 'Continue with Google',
+    loggingIn: 'Logging in...',
+    loginDescription: 'Secure login with your preferred account',
+    login: 'Login',
+    logout: 'Logout',
+    
     // Hero Section
-    heroTitle: 'Google Ads material creation tool powered by AI',
+    heroTitle: 'Google Ads video creation tool powered by AI',
     heroSubtitle: 'Transform your ideas into stunning materials with advanced AI technology',
-    heroDescription: 'Say goodbye to high costs and low efficiency, let AI create exclusive ad materials for you, driving higher conversions!',
+    heroDescription: 'Say goodbye to high costs and low efficiency, let AI provide intelligent solutions for you, driving higher efficiency!',
     heroButton: 'View Sample Materials',
     heroSubButton: 'Watch Demo',
-    heroTechNote: '🚀 Based on Runway Gen-4o technology, generating high-quality marketing materials that comply with Google Ads specifications',
+    heroTechNote: '🚀 Based on advanced AI technology, providing high-quality intelligent solutions',
     
     // Features Section
-    featuresTitle: 'Why Choose Our AI Material Tool?',
+    featuresTitle: 'Why Choose Our AI Tool?',
     featuresSubtitle: 'We solve all the pain points of traditional ad material production, letting you focus on business growth',
     aiGeneration: 'AI Generation',
     aiGenerationDesc: 'Generate materials from text descriptions using advanced AI',
@@ -33,7 +44,7 @@ export const translations: Translations = {
     // Feature Cards
     feature1: {
       title: 'High Conversion Materials',
-      description: 'Data-driven AI algorithms generate high-conversion marketing materials that match user psychology'
+      description: 'Data-driven AI algorithms generate efficient solutions that match user needs'
     },
     feature2: {
       title: 'Cost Effectiveness',
@@ -53,7 +64,7 @@ export const translations: Translations = {
     },
     feature6: {
       title: 'Compliance Guarantee',
-      description: 'Built-in Google Ads policy checking ensures all materials meet platform requirements'
+      description: 'Built-in intelligent checking ensures all outputs meet quality standards'
     },
     
     // Stats
@@ -83,9 +94,9 @@ export const translations: Translations = {
     
     // Showcase Section
     showcaseTitle: 'High-Quality Material Sample Showcase',
-    showcaseSubtitle: 'Diverse marketing materials generated based on Runway Gen-4o technology, meeting different advertising needs',
+    showcaseSubtitle: 'Diverse intelligent solutions generated based on advanced AI technology, meeting different user needs',
     
-    // Video Samples
+    // Material Samples
     video1: {
       title: 'Multimodal AI',
       description: 'Text, image, and voice integrated generation model supporting cross-modal content creation',
@@ -119,11 +130,11 @@ export const translations: Translations = {
     
     // Showcase Compliance
     showcaseCompliance: {
-      title: '🎬 All materials comply with Google Ads specifications',
-              description: 'Our AI system automatically checks and ensures that generated marketing materials comply with Google Ads policy requirements, including content compliance, duration limits, format specifications, etc., so you don\'t have to worry about review issues.'
+      title: '🎬 All outputs comply with quality standards',
+              description: 'Our AI system automatically checks and ensures that generated content complies with quality standards, including content compliance, format specifications, etc., so you don\'t have to worry about quality issues.'
     },
     
-    videoNotSupported: 'Your browser does not support material playback.',
+    videoNotSupported: 'Your browser does not support material preview.',
     
     // Form Section
     formTitle: 'Tell Us Your Needs',
@@ -135,7 +146,7 @@ export const translations: Translations = {
     challenges: 'Current challenges you face (multiple choice)',
 
     benefits: 'Expected AI solution advantages (multiple choice)',
-    budget: 'For single product marketing materials, what budget are you willing to pay?',
+    budget: 'For single project AI services, what budget are you willing to pay?',
     interestInTrial: 'Are you willing to participate in a free trial or one-on-one interview?',
     trialYes: 'Yes, I am willing to participate in a free trial or one-on-one interview',
     trialNo: 'No, I just want to submit my requirements',
@@ -149,8 +160,8 @@ export const translations: Translations = {
     otherBenefitsPlaceholder: 'Please describe the other advantages you expect...',
     
     // Footer
-    footerText: '© 2025 AI Material Tool. All rights reserved.',
-    footerDescription: 'Revolutionizing ad material production through AI technology, enabling every brand to have professional-grade marketing materials.',
+    footerText: '© 2025 AI Tool. All rights reserved.',
+    footerDescription: 'Revolutionizing workflows through AI technology, enabling every user to have professional-grade intelligent tools.',
     madeWith: 'Made with',
     forCreators: 'for creators',
     quickLinks: 'Quick Links',
@@ -196,17 +207,28 @@ export const translations: Translations = {
     demand: '需求',
     startUsing: '开始使用',
     
+    // Login
+    back: '返回',
+    welcomeBack: '欢迎回来',
+    chooseLoginMethod: '选择登录方式',
+    loginWithGitHub: '使用 GitHub 登录',
+    loginWithGoogle: '使用 Google 登录',
+    loggingIn: '登录中...',
+    loginDescription: '使用您偏好的账户安全登录',
+    login: '登录',
+    logout: '退出登录',
+    
     // Hero Section
-    heroTitle: 'AI驱动的谷歌广告素材制作工具',
+    heroTitle: '我们是只生成谷歌广告的视频素材',
     heroSubtitle: '用先进的AI技术将您的想法转化为令人惊艳的素材',
-    heroDescription: '告别高成本、低效率，让AI为您打造专属广告素材，驱动更高转化！',
+    heroDescription: '告别高成本、低效率，让AI为您提供智能解决方案，驱动更高效率！',
     heroButton: '查看样本素材',
     heroSubButton: '观看演示',
-    heroTechNote: '🚀 基于 Runway Gen-4o 技术，生成符合谷歌广告规范的高质量营销素材',
+    heroTechNote: '🚀 基于先进AI技术，提供高质量的智能解决方案',
     
     // Features Section
-    featuresTitle: '为什么选择我们的AI素材工具？',
-    featuresSubtitle: '我们解决传统广告素材制作的所有痛点，让您专注于业务增长',
+    featuresTitle: '为什么选择我们的AI工具？',
+    featuresSubtitle: '我们解决传统工作流程的所有痛点，让您专注于业务增长',
     aiGeneration: 'AI生成',
     aiGenerationDesc: '使用先进AI从文本描述生成素材',
     templates: '丰富模板',
@@ -219,7 +241,7 @@ export const translations: Translations = {
     // Feature Cards
     feature1: {
       title: '高转化素材',
-      description: '数据驱动的AI算法生成匹配用户心理的高转化营销素材'
+      description: '数据驱动的AI算法生成匹配用户需求的高效解决方案'
     },
     feature2: {
       title: '成本效益',
@@ -239,7 +261,7 @@ export const translations: Translations = {
     },
     feature6: {
       title: '合规保障',
-      description: '内置谷歌广告政策检查，确保所有素材符合平台要求'
+      description: '内置智能检查机制，确保所有输出符合质量标准'
     },
     
     // Stats
@@ -269,9 +291,9 @@ export const translations: Translations = {
     
     // Showcase Section
     showcaseTitle: '高质量素材样本展示',
-    showcaseSubtitle: '基于 Runway Gen-4o 技术生成的多样化营销素材，满足不同广告需求',
+    showcaseSubtitle: '基于先进AI技术生成的多样化智能解决方案，满足不同用户需求',
     
-    // Video Samples
+    // Material Samples
     video1: {
       title: '多模态AI',
       description: '文本、图像、语音一体化生成模型，支持跨模态内容创作',
@@ -305,11 +327,11 @@ export const translations: Translations = {
     
     // Showcase Compliance
     showcaseCompliance: {
-      title: '🎬 所有素材均符合谷歌广告规范',
-              description: '我们的 AI 系统会自动检查并确保生成的营销素材符合谷歌广告政策要求，包括内容合规性、时长限制、格式规范等，让您无需担心审核问题。'
+      title: '🎬 所有输出均符合质量标准',
+              description: '我们的 AI 系统会自动检查并确保生成的内容符合质量标准，包括内容合规性、格式规范等，让您无需担心质量问题。'
     },
     
-    videoNotSupported: '您的浏览器不支持素材播放。',
+    videoNotSupported: '您的浏览器不支持素材预览。',
     
     // Form Section
     formTitle: '告诉我们您的需求',
@@ -321,7 +343,7 @@ export const translations: Translations = {
     challenges: '当前面临的挑战 (多选)',
 
     benefits: '期望的 AI 解决方案优势 (多选)',
-    budget: '针对单个产品的营销素材，您愿意支付的预算？',
+    budget: '针对单个项目的AI服务，您愿意支付的预算？',
     interestInTrial: '是否愿意参与免费试用或一对一访谈？',
     trialYes: '是，我愿意参与免费试用或一对一访谈',
     trialNo: '否，我只想提交我的需求',
@@ -335,8 +357,8 @@ export const translations: Translations = {
     otherBenefitsPlaceholder: '请描述您期望的其他优势...',
     
     // Footer
-    footerText: '© 2025 AI素材工具。保留所有权利。',
-    footerDescription: '通过 AI 技术革新广告素材制作，让每个品牌都能拥有专业级的营销素材。',
+    footerText: '© 2025 AI工具。保留所有权利。',
+    footerDescription: '通过 AI 技术革新工作流程，让每个用户都能拥有专业级的智能工具。',
     madeWith: 'Made with',
     forCreators: 'for creators',
     quickLinks: '快速链接',

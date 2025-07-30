@@ -123,12 +123,7 @@ export async function initDatabase(): Promise<ApiResponse> {
   })
 }
 
-// 测试API连接
-export async function testApiConnection(): Promise<ApiResponse> {
-  return apiRequestWithRetry('/api/test', {
-    method: 'GET',
-  })
-}
+
 
 // 验证表单数据
 export function validateFormData(data: any): ValidationError[] {

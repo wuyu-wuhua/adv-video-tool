@@ -19,6 +19,17 @@ export interface TranslationKeys {
   demand: string
   startUsing: string
 
+  // Login
+  back: string
+  welcomeBack: string
+  chooseLoginMethod: string
+  loginWithGitHub: string
+  loginWithGoogle: string
+  loggingIn: string
+  loginDescription: string
+  login: string
+  logout: string
+
   // Hero Section
   heroTitle: string
   heroSubtitle: string

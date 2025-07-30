@@ -1,15 +1,15 @@
-# AI 广告视频素材验证工具 (PoC)
+# AI 工具 (PoC)
 
-一个基于 AI 技术的广告视频素材生成工具，通过 Runway Gen-4 技术自动生成符合谷歌广告需求的高质量视频素材。
+一个基于 AI 技术的多功能工具，通过先进的AI技术提供各种智能服务。
 
 ## 🚀 项目特性
 
-- **AI 驱动**: 基于 Runway Gen-4 技术生成高质量视频
-- **合规保障**: 自动检查谷歌广告政策要求
-- **成本效益**: 相比传统制作成本降低 90%
-- **极速迭代**: 从创意到成品仅需数小时
-- **品牌一致**: 智能保持品牌调性和视觉风格
-- **精准定位**: 根据目标受众自动调整内容策略
+- **AI 驱动**: 基于先进AI技术提供智能服务
+- **多功能**: 支持多种AI应用场景
+- **高效便捷**: 快速响应和处理用户需求
+- **智能分析**: 自动分析和优化处理结果
+- **用户友好**: 简洁直观的操作界面
+- **持续优化**: 不断学习和改进服务质量
 
 ## 🛠️ 技术栈
 
@@ -18,7 +18,7 @@
 - **图标**: Lucide React
 - **数据库**: Supabase (PostgreSQL + Auth + Edge Functions)
 - **部署**: Vercel
-- **AI 视频生成**: RunwayML Gen-4 (手动操作)
+- **AI 服务**: 多种AI技术集成
 
 ## 📦 安装和运行
 
@@ -72,7 +72,7 @@ video-tool/
 │   ├── Header.tsx        # 导航栏
 │   ├── HeroSection.tsx   # 主视觉区
 │   ├── FeaturesSection.tsx # 功能介绍
-│   ├── VideoShowcase.tsx # 视频展示
+│   ├── MaterialShowcase.tsx # 素材展示
 │   ├── DemandForm.tsx    # 需求表单
 │   └── Footer.tsx        # 页脚
 ├── lib/                  # 工具函数
@@ -101,9 +101,9 @@ video-tool/
 - 技术优势说明
 - 卡片式布局
 
-### FR-FE-004: 样本视频展示区 (Video Showcase)
-- 6 个视频样本展示
-- 视频播放控制
+### FR-FE-004: 样本素材展示区 (Material Showcase)
+- 6 个素材样本展示
+- 素材预览控制
 - 分类标签
 - 响应式网格布局
 
@@ -162,8 +162,8 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 - [ ] 集成 Supabase 数据库
 - [ ] 添加用户认证功能
 - [ ] 实现表单数据存储
-- [ ] 添加视频上传功能
-- [ ] 集成 Runway API
+- [ ] 添加素材上传功能
+- [ ] 集成多种AI API
 - [ ] 添加支付功能
 - [ ] 实现视频预览功能
 - [ ] 添加管理后台
@@ -178,5 +178,5 @@ MIT License
 
 ## 📞 联系我们
 
-- 邮箱: contact@aivideotool.com
+- 邮箱: contact@aitool.com
 - 工作时间: 周一至周五 9:00-18:00 

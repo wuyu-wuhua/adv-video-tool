@@ -45,10 +45,12 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   // 初始化语言设置
   useEffect(() => {
+    // 从localStorage获取保存的语言
     if (typeof window !== 'undefined') {
       const savedLanguage = localStorage.getItem('preferred-language') as Language
       if (savedLanguage && ['en', 'zh'].includes(savedLanguage)) {
         setLanguage(savedLanguage)
+        // 更新HTML lang属性
         document.documentElement.lang = savedLanguage
       }
     }
