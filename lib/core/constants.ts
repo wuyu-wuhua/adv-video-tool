@@ -45,6 +45,8 @@ export const ERROR_MESSAGES = {
   UNAUTHORIZED: '未授权访问，请先登录',
   NOT_FOUND: '请求的资源不存在',
   RATE_LIMIT: '请求过于频繁，请稍后重试',
+  DATABASE_ERROR: '数据库操作失败，请稍后重试',
+  EMAIL_ALREADY_EXISTS: '该邮箱已存在，请使用其他邮箱',
 } as const
 
 // 成功消息常量

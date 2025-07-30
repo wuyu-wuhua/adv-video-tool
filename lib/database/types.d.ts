@@ -1,7 +1,7 @@
 // 数据库类型定义
 
 // 用户需求表类型
-export interface Demand {
+export type Demand = {
   id?: string
   name?: string
   email: string
@@ -14,7 +14,7 @@ export interface Demand {
 }
 
 // 视频样本类型
-export interface VideoSample {
+export type VideoSample = {
   id: string
   title: string
   description: string
@@ -25,7 +25,7 @@ export interface VideoSample {
 }
 
 // 用户类型
-export interface User {
+export type User = {
   id: string
   email: string
   name?: string
@@ -34,7 +34,7 @@ export interface User {
 }
 
 // 视频生成任务类型
-export interface VideoGenerationTask {
+export type VideoGenerationTask = {
   id: string
   user_id: string
   prompt: string
@@ -46,7 +46,7 @@ export interface VideoGenerationTask {
 }
 
 // 数据库查询选项
-export interface QueryOptions {
+export type QueryOptions = {
   limit?: number
   offset?: number
   orderBy?: string
@@ -54,14 +54,14 @@ export interface QueryOptions {
 }
 
 // 数据库响应类型
-export interface DatabaseResponse<T> {
+export type DatabaseResponse<T> = {
   data: T | null
   error: any
   count?: number
 }
 
 // 分页响应类型
-export interface PaginatedResponse<T> {
+export type PaginatedResponse<T> = {
   data: T[]
   total: number
   page: number
@@ -69,21 +69,43 @@ export interface PaginatedResponse<T> {
   totalPages: number
 }
 
-// 数据库表名枚举
-export enum DatabaseTables {
-  DEMANDS = 'demands',
-  USERS = 'users',
-  VIDEO_TASKS = 'video_generation_tasks',
-  VIDEO_SAMPLES = 'video_samples'
+// 数据库表名常量
+export declare const DATABASE_TABLES: {
+  readonly DEMANDS: 'demands'
+  readonly USERS: 'users'
+  readonly VIDEO_TASKS: 'video_generation_tasks'
+  readonly VIDEO_SAMPLES: 'video_samples'
 }
 
 // 数据库操作类型
 export type DatabaseOperation = 'insert' | 'select' | 'update' | 'delete'
 
 // 数据库错误类型
-export interface DatabaseError {
+export type DatabaseError = {
   code: string
   message: string
   details?: string
   hint?: string
+}
+
+// Supabase 客户端配置类型
+export type SupabaseConfig = {
+  url: string
+  anonKey: string
+  serviceKey?: string
+}
+
+// Cookie 选项类型（用于 Supabase SSR）
+export type CookieOptions = {
+  name: string
+  value: string
+  options?: {
+    domain?: string
+    path?: string
+    expires?: Date
+    maxAge?: number
+    secure?: boolean
+    httpOnly?: boolean
+    sameSite?: 'strict' | 'lax' | 'none'
+  }
 } 

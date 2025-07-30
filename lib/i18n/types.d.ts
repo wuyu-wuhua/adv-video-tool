@@ -4,22 +4,23 @@
 export type Language = 'en' | 'zh'
 
 // 语言上下文类型
-export interface LanguageContextType {
+export type LanguageContextType = {
   language: Language
   setLanguage: (lang: Language) => void
   t: (key: string) => string
 }
 
-// 翻译键值类型
-export interface TranslationKeys {
-  // Header
+// Header 模块类型
+export type HeaderTranslations = {
   home: string
   features: string
   showcase: string
   demand: string
   startUsing: string
+}
 
-  // Login
+// Login 模块类型
+export type LoginTranslations = {
   back: string
   welcomeBack: string
   chooseLoginMethod: string
@@ -29,16 +30,30 @@ export interface TranslationKeys {
   loginDescription: string
   login: string
   logout: string
+  secure: string
+  fast: string
+}
 
-  // Hero Section
+// Hero 模块类型
+export type HeroTranslations = {
   heroTitle: string
   heroSubtitle: string
   heroDescription: string
   heroButton: string
   heroSubButton: string
   heroTechNote: string
+  costReduction: string
+  productionSpeed: string
+  conversionIncrease: string
+}
 
-  // Features Section
+// Features 模块类型
+export type FeatureCard = {
+  title: string
+  description: string
+}
+
+export type FeaturesTranslations = {
   featuresTitle: string
   featuresSubtitle: string
   aiGeneration: string
@@ -49,42 +64,26 @@ export interface TranslationKeys {
   editingDesc: string
   export: string
   exportDesc: string
+  feature1: FeatureCard
+  feature2: FeatureCard
+  feature3: FeatureCard
+  feature4: FeatureCard
+  feature5: FeatureCard
+  feature6: FeatureCard
+}
 
-  // Feature Cards
-  feature1: {
-    title: string
-    description: string
-  }
-  feature2: {
-    title: string
-    description: string
-  }
-  feature3: {
-    title: string
-    description: string
-  }
-  feature4: {
-    title: string
-    description: string
-  }
-  feature5: {
-    title: string
-    description: string
-  }
-  feature6: {
-    title: string
-    description: string
-  }
-
-  // Stats
+// Stats 模块类型
+export type StatsTranslations = {
   stats: {
     cases: string
     industries: string
     satisfaction: string
     delivery: string
   }
+}
 
-  // Tech Advantage
+// Tech Advantage 模块类型
+export type TechAdvantageTranslations = {
   techAdvantage: {
     title: string
     data: {
@@ -100,52 +99,56 @@ export interface TranslationKeys {
       description: string
     }
   }
+}
 
-  // Showcase Section
+// Showcase 模块类型
+export type VideoSample = {
+  title: string
+  description: string
+  category: string
+}
+
+export type ShowcaseTranslations = {
   showcaseTitle: string
   showcaseSubtitle: string
-
-  // Video Samples
-  video1: {
-    title: string
-    description: string
-    category: string
-  }
-  video2: {
-    title: string
-    description: string
-    category: string
-  }
-  video3: {
-    title: string
-    description: string
-    category: string
-  }
-  video4: {
-    title: string
-    description: string
-    category: string
-  }
-  video5: {
-    title: string
-    description: string
-    category: string
-  }
-  video6: {
-    title: string
-    description: string
-    category: string
-  }
-
-  // Showcase Compliance
+  video1: VideoSample
+  video2: VideoSample
+  video3: VideoSample
+  video4: VideoSample
+  video5: VideoSample
+  video6: VideoSample
   showcaseCompliance: {
     title: string
     description: string
   }
-
   videoNotSupported: string
+}
 
-  // Form Section
+// Form 模块类型
+export type FormOptions = {
+  time: string
+  skills: string
+  cost: string
+  quality: string
+  other: string
+}
+
+export type BenefitsOptions = {
+  efficiency: string
+  quality: string
+  cost: string
+  time: string
+  other: string
+}
+
+export type BudgetOptions = {
+  low: string
+  medium: string
+  high: string
+  enterprise: string
+}
+
+export type FormTranslations = {
   formTitle: string
   formSubtitle: string
   name: string
@@ -161,12 +164,15 @@ export interface TranslationKeys {
   submit: string
   submitting: string
   submitError: string
-
-  // Form Placeholders
   otherChallengesPlaceholder: string
   otherBenefitsPlaceholder: string
+  challengesOptions: FormOptions
+  benefitsOptions: BenefitsOptions
+  budgetOptions: BudgetOptions
+}
 
-  // Footer
+// Footer 模块类型
+export type FooterTranslations = {
   footerText: string
   footerDescription: string
   madeWith: string
@@ -177,44 +183,27 @@ export interface TranslationKeys {
   privacyPolicy: string
   termsOfService: string
   cookiePolicy: string
-
-  // Hero Stats
-  costReduction: string
-  productionSpeed: string
-  conversionIncrease: string
-
-  // Form Options
-  challengesOptions: {
-    time: string
-    skills: string
-    cost: string
-    quality: string
-    other: string
-  }
-
-  benefitsOptions: {
-    efficiency: string
-    quality: string
-    cost: string
-    time: string
-    other: string
-  }
-  budgetOptions: {
-    low: string
-    medium: string
-    high: string
-    enterprise: string
-  }
 }
 
+// 完整的翻译键值类型
+export type TranslationKeys = HeaderTranslations &
+  LoginTranslations &
+  HeroTranslations &
+  FeaturesTranslations &
+  StatsTranslations &
+  TechAdvantageTranslations &
+  ShowcaseTranslations &
+  FormTranslations &
+  FooterTranslations
+
 // 翻译对象类型
-export interface Translations {
+export type Translations = {
   en: TranslationKeys
   zh: TranslationKeys
 }
 
 // 语言配置
-export interface LanguageConfig {
+export type LanguageConfig = {
   code: Language
   name: string
   nativeName: string
@@ -223,25 +212,10 @@ export interface LanguageConfig {
 }
 
 // 语言配置列表
-export const LANGUAGE_CONFIGS: Record<Language, LanguageConfig> = {
-  en: {
-    code: 'en',
-    name: 'English',
-    nativeName: 'English',
-    flag: '🇺🇸',
-    direction: 'ltr'
-  },
-  zh: {
-    code: 'zh',
-    name: 'Chinese',
-    nativeName: '中文',
-    flag: '🇨🇳',
-    direction: 'ltr'
-  }
-} as const
+export declare const LANGUAGE_CONFIGS: Record<Language, LanguageConfig>
 
 // 默认语言
-export const DEFAULT_LANGUAGE: Language = 'en'
+export declare const DEFAULT_LANGUAGE: Language
 
 // 支持的语言列表
-export const SUPPORTED_LANGUAGES: Language[] = ['en', 'zh'] 
+export declare const SUPPORTED_LANGUAGES: Language[] 

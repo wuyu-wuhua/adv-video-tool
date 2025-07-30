@@ -1,8 +1,9 @@
 'use client'
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
-import { LanguageContextType, Language, DEFAULT_LANGUAGE } from './types'
+import { createContext, useContext, useState, useEffect, type ReactNode } from 'react'
+import type { Language, LanguageContextType } from './types'
 import { translations } from './translations'
+import { DEFAULT_LANGUAGE, LANGUAGE_CONFIGS, SUPPORTED_LANGUAGES } from './config'
 
 // 创建语言上下文
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
@@ -11,7 +12,27 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguage] = useState<Language>(DEFAULT_LANGUAGE)
 
-  // 翻译函数
+  // 从 localStorage 或浏览器语言设置中获取初始语言
+  useEffect(() => {
+    const savedLanguage = localStorage.getItem('language') as Language
+    if (savedLanguage && SUPPORTED_LANGUAGES.includes(savedLanguage)) {
+      setLanguage(savedLanguage)
+    } else {
+      // 尝试从浏览器语言设置中检测
+      const browserLanguage = navigator.language.split('-')[0] as Language
+      if (SUPPORTED_LANGUAGES.includes(browserLanguage)) {
+        setLanguage(browserLanguage)
+      }
+    }
+  }, [])
+
+  // 语言切换函数
+  const handleLanguageChange = (newLanguage: Language) => {
+    setLanguage(newLanguage)
+    localStorage.setItem('language', newLanguage)
+  }
+
+  // 翻译函数 - 支持嵌套键值访问
   const t = (key: string): string => {
     const keys = key.split('.')
     let value: any = translations[language]
@@ -28,49 +49,21 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     return typeof value === 'string' ? value : key
   }
 
-  // 切换语言
-  const handleLanguageChange = (newLanguage: Language) => {
-    setLanguage(newLanguage)
-    
-    // 更新HTML lang属性
-    if (typeof document !== 'undefined') {
-      document.documentElement.lang = newLanguage
-    }
-    
-    // 保存到localStorage
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('preferred-language', newLanguage)
-    }
-  }
-
-  // 初始化语言设置
-  useEffect(() => {
-    // 从localStorage获取保存的语言
-    if (typeof window !== 'undefined') {
-      const savedLanguage = localStorage.getItem('preferred-language') as Language
-      if (savedLanguage && ['en', 'zh'].includes(savedLanguage)) {
-        setLanguage(savedLanguage)
-        // 更新HTML lang属性
-        document.documentElement.lang = savedLanguage
-      }
-    }
-  }, [])
-
-  const contextValue: LanguageContextType = {
+  const value: LanguageContextType = {
     language,
     setLanguage: handleLanguageChange,
     t
   }
 
   return (
-    <LanguageContext.Provider value={contextValue}>
+    <LanguageContext.Provider value={value}>
       {children}
     </LanguageContext.Provider>
   )
 }
 
-// 使用语言的Hook
-export function useLanguage(): LanguageContextType {
+// 使用语言上下文的 Hook
+export function useLanguage() {
   const context = useContext(LanguageContext)
   if (context === undefined) {
     throw new Error('useLanguage must be used within a LanguageProvider')
@@ -78,8 +71,7 @@ export function useLanguage(): LanguageContextType {
   return context
 }
 
-// 导出翻译对象供直接使用
-export { translations }
-
-// 导出语言类型
-export type { Language, LanguageContextType } from './types' 
+// 导出类型和配置
+export type { Language, LanguageContextType } from './types'
+export { LANGUAGE_CONFIGS, SUPPORTED_LANGUAGES, DEFAULT_LANGUAGE } from './config'
+export { translations } 

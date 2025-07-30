@@ -1,0 +1,10 @@
+// 导出所有翻译模块
+export { headerTranslations } from './header'
+export { loginTranslations } from './login'
+export { heroTranslations } from './hero'
+export { featuresTranslations } from './features'
+export { statsTranslations } from './stats'
+export { techAdvantageTranslations } from './techAdvantage'
+export { showcaseTranslations } from './showcase'
+export { formTranslations } from './form'
+export { footerTranslations } from './footer' 

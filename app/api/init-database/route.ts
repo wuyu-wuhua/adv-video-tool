@@ -1,37 +1,28 @@
-import { NextResponse } from 'next/server'
-import { initializeDatabase } from '@/lib/database/supabase'
+import { NextRequest, NextResponse } from 'next/server'
+import { initializeDatabase } from '@/lib/database'
+import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/lib/core/constants'
 
-export async function POST() {
+export async function POST(request: NextRequest) {
   try {
-    console.log('Starting database initialization...')
+    console.log('🚀 Initializing database...')
+    
     const success = await initializeDatabase()
     
     if (success) {
-      return NextResponse.json(
-        { 
-          success: true, 
-          message: '数据库初始化成功，表已创建或已存在' 
-        },
-        { status: 200 }
-      )
+      return NextResponse.json({
+        success: true,
+        message: SUCCESS_MESSAGES.SAVE_SUCCESS
+      })
     } else {
       return NextResponse.json(
-        { 
-          success: false, 
-          message: '自动数据库初始化失败',
-          instructions: '请参考 AUTO_INIT_SETUP.md 文件配置Service Role Key，或参考 DATABASE_SETUP.md 手动创建表'
-        },
+        { error: ERROR_MESSAGES.DATABASE_ERROR },
         { status: 500 }
       )
     }
   } catch (error) {
     console.error('Database initialization error:', error)
     return NextResponse.json(
-      { 
-        success: false, 
-        message: '数据库初始化过程中发生错误',
-        error: error instanceof Error ? error.message : 'Unknown error'
-      },
+      { error: ERROR_MESSAGES.SERVER_ERROR },
       { status: 500 }
     )
   }

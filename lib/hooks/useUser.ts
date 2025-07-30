@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { createClient } from '@/lib/supabase/client'
+import { useState, useEffect } from 'react'
+import { createBrowserSupabaseClient } from '@/lib/database/client'
 import type { User } from '@supabase/supabase-js'
 
 export function useUser() {
@@ -9,27 +9,32 @@ export function useUser() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const supabase = createClient()
-    
-    // 获取初始用户状态
-    supabase.auth.getUser().then(({ data }) => {
-      setUser(data.user)
-      setLoading(false)
-    })
+    const supabase = createBrowserSupabaseClient()
+
+    // 获取当前用户
+    const getUser = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser()
+        setUser(user)
+      } catch (error) {
+        console.error('Error getting user:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    getUser()
 
     // 监听认证状态变化
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null)
-      setLoading(false)
-    })
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        setUser(session?.user ?? null)
+        setLoading(false)
+      }
+    )
 
-    return () => listener?.subscription.unsubscribe()
+    return () => subscription.unsubscribe()
   }, [])
 
-  const signOut = async () => {
-    const supabase = createClient()
-    await supabase.auth.signOut()
-  }
-
-  return { user, loading, signOut }
+  return { user, loading }
 } 
