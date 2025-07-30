@@ -1,86 +1,274 @@
-# 国际化 (i18n) 模块化翻译系统
+# 国际化 (i18n) 系统
 
-## 概述
+本项目使用模块化的国际化系统，支持中文和英文两种语言。
 
-本项目采用模块化的翻译文件结构，将翻译内容按功能模块拆分，提高代码的可维护性和可扩展性。
-
-## 文件结构
+## 📁 文件结构
 
 ```
 lib/i18n/
-├── types.d.ts          # 类型定义文件
-├── config.ts           # 语言配置常量
-├── translations.ts     # 主翻译文件（合并所有模块）
-├── index.tsx          # 语言上下文和Hook
-└── modules/           # 翻译模块目录
+├── index.tsx          # 主要导出文件，包含 LanguageProvider 和 useLanguage hook
+├── translations.ts    # 主翻译文件，合并所有模块翻译
+├── types.d.ts         # TypeScript 类型定义
+├── config.ts          # 配置常量
+└── modules/           # 模块化翻译文件
     ├── index.ts       # 模块导出索引
-    ├── header.ts      # 头部导航翻译
-    ├── login.ts       # 登录相关翻译
-    ├── hero.ts        # 主页横幅翻译
+    ├── header.ts      # Header 组件翻译
+    ├── login.ts       # 登录页面翻译
+    ├── hero.ts        # Hero 区域翻译
     ├── features.ts    # 功能特性翻译
-    ├── stats.ts       # 统计数据翻译
-    ├── techAdvantage.ts # 技术优势翻译
-    ├── showcase.ts    # 展示案例翻译
-    ├── form.ts        # 表单相关翻译
-    └── footer.ts      # 页脚翻译
+    ├── generator.ts   # 生成器页面翻译
+    └── ...
 ```
 
-## 类型系统
-
-- 使用 `type` 替代 `interface`，符合项目规范
-- 每个模块都有独立的类型定义
-- 支持嵌套对象和复杂数据结构
-- 类型安全的翻译键访问
-
-## 使用方法
+## 🚀 快速开始
 
 ### 1. 在组件中使用翻译
 
 ```tsx
 import { useLanguage } from '@/lib/i18n'
 
-export default function MyComponent() {
+export function MyComponent() {
   const { t, language, setLanguage } = useLanguage()
   
   return (
     <div>
-      <h1>{t('heroTitle')}</h1>
-      <p>{t('heroDescription')}</p>
-      
-      {/* 嵌套键值访问 */}
-      <div>{t('feature1.title')}</div>
-      <div>{t('feature1.description')}</div>
+      <h1>{t('title')}</h1>
+      <p>{t('description')}</p>
+      <button onClick={() => setLanguage(language === 'en' ? 'zh' : 'en')}>
+        {language === 'en' ? '中文' : 'English'}
+      </button>
     </div>
   )
 }
 ```
 
-### 2. 添加新的翻译模块
+### 2. 创建新模块的翻译
 
-1. 在 `modules/` 目录下创建新的翻译文件
-2. 在 `types.d.ts` 中添加对应的类型定义
-3. 在 `modules/index.ts` 中导出新模块
-4. 在 `translations.ts` 中合并新模块
+#### 方法一：使用自动生成工具（推荐）
 
-### 3. 添加新的语言支持
+```bash
+# 生成新模块的翻译文件
+node scripts/generate-translations.js myNewModule
+```
 
-1. 在 `types.d.ts` 中更新 `Language` 类型
-2. 在 `config.ts` 中添加语言配置
-3. 在所有翻译模块中添加新语言的翻译内容
+这将自动创建：
+- `lib/i18n/modules/myNewModule.ts`
+- 更新类型定义
+- 更新模块索引
+- 更新主翻译文件
 
-## 特性
+#### 方法二：手动创建
 
-- ✅ 模块化结构，易于维护
-- ✅ 类型安全，支持TypeScript
-- ✅ 支持嵌套键值访问
-- ✅ 自动语言检测
-- ✅ 本地存储持久化
-- ✅ 浏览器语言偏好检测
+1. **创建翻译文件** (`lib/i18n/modules/myModule.ts`)
 
-## 最佳实践
+```typescript
+import type { MyModuleTranslations } from '../types'
 
-1. **模块化**: 按功能模块拆分翻译文件
-2. **类型安全**: 使用TypeScript类型定义
-3. **命名规范**: 使用描述性的键名
-4. **嵌套结构**: 合理使用嵌套对象组织翻译
-5. **一致性**: 保持翻译键的命名一致性 
+export const myModuleTranslations: Record<'en' | 'zh', MyModuleTranslations> = {
+  en: {
+    title: 'My Module Title',
+    description: 'Module description',
+    button: 'Click me',
+    placeholder: 'Enter text...',
+    error: 'An error occurred'
+  },
+  zh: {
+    title: '我的模块标题',
+    description: '模块描述',
+    button: '点击我',
+    placeholder: '输入文本...',
+    error: '发生错误'
+  }
+}
+```
+
+2. **添加类型定义** (`lib/i18n/types.d.ts`)
+
+```typescript
+export type MyModuleTranslations = {
+  title: string
+  description: string
+  button: string
+  placeholder: string
+  error: string
+}
+```
+
+3. **更新模块索引** (`lib/i18n/modules/index.ts`)
+
+```typescript
+export { myModuleTranslations } from './myModule'
+```
+
+4. **更新主翻译文件** (`lib/i18n/translations.ts`)
+
+```typescript
+import { myModuleTranslations } from './modules/myModule'
+
+export const translations = {
+  en: {
+    // ... 其他翻译
+    ...myModuleTranslations.en,
+  },
+  zh: {
+    // ... 其他翻译
+    ...myModuleTranslations.zh,
+  },
+}
+```
+
+## 📝 翻译键命名规范
+
+### 基本规范
+- 使用 camelCase 命名
+- 使用描述性的键名
+- 按功能分组
+
+### 常见前缀
+- `pageTitle` - 页面标题
+- `pageDescription` - 页面描述
+- `button` - 按钮文本
+- `label` - 表单标签
+- `placeholder` - 输入框占位符
+- `error` - 错误信息
+- `success` - 成功信息
+- `loading` - 加载状态
+
+### 示例
+```typescript
+{
+  // 页面级别
+  pageTitle: '页面标题',
+  pageDescription: '页面描述',
+  
+  // 表单相关
+  formTitle: '表单标题',
+  submitButton: '提交',
+  cancelButton: '取消',
+  
+  // 错误信息
+  errorRequired: '此字段为必填项',
+  errorInvalidEmail: '邮箱格式不正确',
+  
+  // 状态信息
+  loadingText: '加载中...',
+  successMessage: '操作成功',
+}
+```
+
+## 🔧 高级用法
+
+### 1. 动态翻译键
+
+```tsx
+const { t } = useLanguage()
+const status = 'loading'
+
+return <div>{t(`${status}Text`)}</div>
+```
+
+### 2. 条件翻译
+
+```tsx
+const { t, language } = useLanguage()
+
+return (
+  <div>
+    {language === 'en' ? t('englishText') : t('chineseText')}
+  </div>
+)
+```
+
+### 3. 复数形式处理
+
+```tsx
+const { t } = useLanguage()
+const count = 5
+
+return (
+  <div>
+    {count === 1 ? t('singleItem') : t('multipleItems')}
+  </div>
+)
+```
+
+## 🌐 语言切换
+
+### 在组件中切换语言
+
+```tsx
+import { useLanguage } from '@/lib/i18n'
+
+export function LanguageSwitcher() {
+  const { language, setLanguage } = useLanguage()
+  
+  return (
+    <button onClick={() => setLanguage(language === 'en' ? 'zh' : 'en')}>
+      {language === 'en' ? '中文' : 'English'}
+    </button>
+  )
+}
+```
+
+### 获取当前语言
+
+```tsx
+const { language } = useLanguage()
+
+console.log('Current language:', language) // 'en' 或 'zh'
+```
+
+## 📋 最佳实践
+
+### 1. 模块化组织
+- 每个功能模块创建独立的翻译文件
+- 使用描述性的模块名称
+- 保持翻译键的一致性
+
+### 2. 类型安全
+- 始终定义 TypeScript 类型
+- 使用类型检查确保翻译键存在
+- 避免硬编码字符串
+
+### 3. 维护性
+- 定期检查未使用的翻译键
+- 保持中英文翻译的一致性
+- 使用有意义的键名
+
+### 4. 性能优化
+- 避免在渲染函数中创建翻译键
+- 使用 useCallback 缓存翻译函数
+- 合理使用条件渲染
+
+## 🛠️ 工具和脚本
+
+### 自动生成翻译文件
+```bash
+node scripts/generate-translations.js <模块名>
+```
+
+### 检查翻译完整性
+```bash
+# 可以添加脚本检查所有翻译键是否都有对应的翻译
+```
+
+## 🔍 调试
+
+### 检查翻译键是否存在
+```tsx
+const { t } = useLanguage()
+
+// 如果键不存在，会返回键名本身
+console.log(t('nonExistentKey')) // 输出: 'nonExistentKey'
+```
+
+### 开发模式下的警告
+在开发模式下，系统会在控制台显示缺失的翻译键。
+
+## 📚 相关文件
+
+- `lib/i18n/index.tsx` - 主要实现文件
+- `lib/i18n/translations.ts` - 翻译合并文件
+- `lib/i18n/types.d.ts` - 类型定义
+- `lib/i18n/config.ts` - 配置常量
+- `scripts/generate-translations.js` - 自动生成工具 

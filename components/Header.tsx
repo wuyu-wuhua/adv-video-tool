@@ -28,6 +28,11 @@ export default function Header() {
     handleMenuMouseLeave,
   } = useHeader()
 
+  // 跳转到生成器页面
+  const handleStartUsing = () => {
+    window.location.href = '/generator'
+  }
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 glass-effect">
       <div className="container mx-auto px-4 py-4">
@@ -47,6 +52,7 @@ export default function Header() {
             t={t}
             onNavClick={handleNavClick}
             onScrollToTop={scrollToTop}
+            onStartUsing={handleStartUsing}
           />
 
           {/* 右侧功能区域 */}
@@ -106,6 +112,7 @@ export default function Header() {
           onNavClick={handleNavClick}
           onScrollToTop={scrollToTop}
           onLogin={handleLogin}
+          onStartUsing={handleStartUsing}
           user={user}
           loading={loading}
         />

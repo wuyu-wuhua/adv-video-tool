@@ -6,6 +6,7 @@ type MobileMenuProps = {
   onNavClick: (targetId: string) => void
   onScrollToTop: () => void
   onLogin: () => void
+  onStartUsing: () => void
   user: any
   loading: boolean
 }
@@ -15,6 +16,7 @@ export function MobileMenu({
   onNavClick,
   onScrollToTop,
   onLogin,
+  onStartUsing,
   user,
   loading
 }: MobileMenuProps) {
@@ -45,7 +47,10 @@ export function MobileMenu({
         >
           {t("demand")}
         </Button>
-        <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white justify-start shadow-lg">
+        <Button 
+          onClick={onStartUsing}
+          className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white justify-start shadow-lg"
+        >
           <Sparkles className="w-4 h-4 mr-2" />
           {t("startUsing")}
         </Button>

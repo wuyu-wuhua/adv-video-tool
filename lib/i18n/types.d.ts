@@ -219,3 +219,65 @@ export declare const DEFAULT_LANGUAGE: Language
 
 // 支持的语言列表
 export declare const SUPPORTED_LANGUAGES: Language[] 
+
+export type GeneratorTranslations = {
+  // 页面标题
+  pageTitle: string
+  pageDescription: string
+  
+  // 图片上传
+  uploadTitle: string
+  uploadDescription: string
+  uploadClickText: string
+  uploadFormat: string
+  uploadedImages: string
+  
+  // 广告目的
+  adPurposeTitle: string
+  adPurposeLabel: string
+  adPurposePlaceholder: string
+  commonPurposes: string
+  
+  // 常见目的
+  purposeIncreaseRegistrations: string
+  purposePromoteFeatures: string
+  purposeAITools: string
+  purposeProductIntro: string
+  purposePromotion: string
+  purposeBrandAwareness: string
+  
+  // 品牌信息
+  brandInfoTitle: string
+  brandNameLabel: string
+  brandNamePlaceholder: string
+  brandSloganLabel: string
+  brandSloganPlaceholder: string
+  websiteUrlLabel: string
+  websiteUrlPlaceholder: string
+  
+  // 生成按钮
+  generateButton: string
+  generating: string
+  
+  // 结果展示
+  resultsTitle: string
+  resultsEmpty: string
+  totalGenerated: string
+  downloadAll: string
+  downloadSingle: string
+  
+  // 错误信息
+  errorNoImages: string
+  errorNoPurpose: string
+  errorInvalidFile: string
+  errorFileTooLarge: string
+  errorGenerationFailed: string
+  errorDownloadFailed: string
+  errorBatchDownload: string
+  
+  // 加载状态
+  redirecting: string
+  
+  // 文件信息
+  fileSize: string
+} 

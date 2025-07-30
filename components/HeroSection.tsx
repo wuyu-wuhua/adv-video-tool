@@ -15,6 +15,10 @@ export default function HeroSection() {
     document.getElementById('form')?.scrollIntoView({ behavior: 'smooth' })
   }
 
+  const goToGenerator = () => {
+    window.location.href = '/generator'
+  }
+
   return (
     <section className="pt-24 pb-16 px-4">
       <div className="container mx-auto text-center">
@@ -61,7 +65,7 @@ export default function HeroSection() {
           <Button 
             size="lg" 
             className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 text-lg"
-            onClick={scrollToShowcase}
+            onClick={goToGenerator}
           >
             <Play className="w-5 h-5 mr-2" />
             {t('heroButton')}

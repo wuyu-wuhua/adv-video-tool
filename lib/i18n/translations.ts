@@ -1,18 +1,15 @@
-import type { Translations } from './types'
-import {
-  headerTranslations,
-  loginTranslations,
-  heroTranslations,
-  featuresTranslations,
-  statsTranslations,
-  techAdvantageTranslations,
-  showcaseTranslations,
-  formTranslations,
-  footerTranslations
-} from './modules'
+import { headerTranslations } from './modules/header'
+import { loginTranslations } from './modules/login'
+import { heroTranslations } from './modules/hero'
+import { featuresTranslations } from './modules/features'
+import { statsTranslations } from './modules/stats'
+import { techAdvantageTranslations } from './modules/techAdvantage'
+import { showcaseTranslations } from './modules/showcase'
+import { formTranslations } from './modules/form'
+import { footerTranslations } from './modules/footer'
+import { generatorTranslations } from './modules/generator'
 
-// 合并所有翻译模块
-export const translations: Translations = {
+export const translations = {
   en: {
     ...headerTranslations.en,
     ...loginTranslations.en,
@@ -22,7 +19,8 @@ export const translations: Translations = {
     ...techAdvantageTranslations.en,
     ...showcaseTranslations.en,
     ...formTranslations.en,
-    ...footerTranslations.en
+    ...footerTranslations.en,
+    ...generatorTranslations.en,
   },
   zh: {
     ...headerTranslations.zh,
@@ -33,6 +31,7 @@ export const translations: Translations = {
     ...techAdvantageTranslations.zh,
     ...showcaseTranslations.zh,
     ...formTranslations.zh,
-    ...footerTranslations.zh
-  }
+    ...footerTranslations.zh,
+    ...generatorTranslations.zh,
+  },
 } 
