@@ -11,18 +11,18 @@ export const translations: Translations = {
     startUsing: 'Get Started',
     
     // Hero Section
-    heroTitle: 'Google Ads video creation tool powered by AI',
-    heroSubtitle: 'Transform your ideas into stunning videos with advanced AI technology',
-    heroDescription: 'Say goodbye to high costs and low efficiency, let AI create exclusive ad videos for you, driving higher conversions!',
-    heroButton: 'View Sample Videos',
+    heroTitle: 'Google Ads material creation tool powered by AI',
+    heroSubtitle: 'Transform your ideas into stunning materials with advanced AI technology',
+    heroDescription: 'Say goodbye to high costs and low efficiency, let AI create exclusive ad materials for you, driving higher conversions!',
+    heroButton: 'View Sample Materials',
     heroSubButton: 'Watch Demo',
-    heroTechNote: '🚀 Based on Runway Gen-4 technology, generating high-quality video materials that comply with Google Ads specifications',
+    heroTechNote: '🚀 Based on Runway Gen-4o technology, generating high-quality marketing materials that comply with Google Ads specifications',
     
     // Features Section
-    featuresTitle: 'Why Choose Our AI Video Tool?',
-    featuresSubtitle: 'We solve all the pain points of traditional ad video production, letting you focus on business growth',
+    featuresTitle: 'Why Choose Our AI Material Tool?',
+    featuresSubtitle: 'We solve all the pain points of traditional ad material production, letting you focus on business growth',
     aiGeneration: 'AI Generation',
-    aiGenerationDesc: 'Generate videos from text descriptions using advanced AI',
+    aiGenerationDesc: 'Generate materials from text descriptions using advanced AI',
     templates: 'Rich Templates',
     templatesDesc: 'Hundreds of professional templates to choose from',
     editing: 'Smart Editing',
@@ -33,11 +33,11 @@ export const translations: Translations = {
     // Feature Cards
     feature1: {
       title: 'High Conversion Materials',
-      description: 'Data-driven AI algorithms generate high-conversion video materials that match user psychology'
+      description: 'Data-driven AI algorithms generate high-conversion marketing materials that match user psychology'
     },
     feature2: {
       title: 'Cost Effectiveness',
-      description: 'Compared to traditional video production, costs are reduced by 90% while maintaining professional quality'
+      description: 'Compared to traditional material production, costs are reduced by 90% while maintaining professional quality'
     },
     feature3: {
       title: 'Rapid Iteration',
@@ -49,7 +49,7 @@ export const translations: Translations = {
     },
     feature5: {
       title: 'Precise Targeting',
-      description: 'Automatically adjusts video style and content strategy based on target audience characteristics'
+      description: 'Automatically adjusts material style and content strategy based on target audience characteristics'
     },
     feature6: {
       title: 'Compliance Guarantee',
@@ -82,8 +82,8 @@ export const translations: Translations = {
     },
     
     // Showcase Section
-    showcaseTitle: 'High-Quality Video Sample Showcase',
-    showcaseSubtitle: 'Diverse video materials generated based on Runway Gen-4 technology, meeting different advertising needs',
+    showcaseTitle: 'High-Quality Material Sample Showcase',
+    showcaseSubtitle: 'Diverse marketing materials generated based on Runway Gen-4o technology, meeting different advertising needs',
     
     // Video Samples
     video1: {
@@ -119,23 +119,23 @@ export const translations: Translations = {
     
     // Showcase Compliance
     showcaseCompliance: {
-      title: '🎬 All videos comply with Google Ads specifications',
-      description: 'Our AI system automatically checks and ensures that generated video materials comply with Google Ads policy requirements, including content compliance, duration limits, format specifications, etc., so you don\'t have to worry about review issues.'
+      title: '🎬 All materials comply with Google Ads specifications',
+              description: 'Our AI system automatically checks and ensures that generated marketing materials comply with Google Ads policy requirements, including content compliance, duration limits, format specifications, etc., so you don\'t have to worry about review issues.'
     },
     
-    videoNotSupported: 'Your browser does not support video playback.',
+    videoNotSupported: 'Your browser does not support material playback.',
     
     // Form Section
     formTitle: 'Tell Us Your Needs',
-    formSubtitle: 'Fill out the form below and we will provide you with a personalized AI video solution',
+    formSubtitle: 'Fill out the form below and we will provide you with a personalized AI material solution',
     name: 'Name/Company Name',
     email: 'Email Address',
     namePlaceholder: 'Please enter your name or company name',
     emailPlaceholder: 'Please enter your email address',
     challenges: 'Current challenges you face (multiple choice)',
-    videoTypes: 'Expected video types (multiple choice)',
+
     benefits: 'Expected AI solution advantages (multiple choice)',
-    budget: 'For 15-30 second custom videos, what budget are you willing to pay?',
+    budget: 'For single product marketing materials, what budget are you willing to pay?',
     interestInTrial: 'Are you willing to participate in a free trial or one-on-one interview?',
     trialYes: 'Yes, I am willing to participate in a free trial or one-on-one interview',
     trialNo: 'No, I just want to submit my requirements',
@@ -145,12 +145,12 @@ export const translations: Translations = {
     
     // Form Placeholders
     otherChallengesPlaceholder: 'Please describe in detail the other challenges you face...',
-    otherVideoTypesPlaceholder: 'Please describe the other video types you expect...',
+
     otherBenefitsPlaceholder: 'Please describe the other advantages you expect...',
     
     // Footer
-    footerText: '© 2024 AI Video Tool. All rights reserved.',
-    footerDescription: 'Revolutionizing ad video production through AI technology, enabling every brand to have professional-grade video materials.',
+    footerText: '© 2025 AI Material Tool. All rights reserved.',
+    footerDescription: 'Revolutionizing ad material production through AI technology, enabling every brand to have professional-grade marketing materials.',
     madeWith: 'Made with',
     forCreators: 'for creators',
     quickLinks: 'Quick Links',
@@ -173,13 +173,7 @@ export const translations: Translations = {
       quality: 'Quality issues',
       other: 'Other'
     },
-    videoTypesOptions: {
-      marketing: 'Marketing videos',
-      training: 'Training videos',
-      entertainment: 'Entertainment',
-      education: 'Educational content',
-      other: 'Other'
-    },
+
     benefitsOptions: {
       efficiency: 'Improve efficiency',
       quality: 'Better quality',
@@ -203,18 +197,18 @@ export const translations: Translations = {
     startUsing: '开始使用',
     
     // Hero Section
-    heroTitle: 'AI驱动的谷歌广告视频制作工具',
-    heroSubtitle: '用先进的AI技术将您的想法转化为令人惊艳的视频',
-    heroDescription: '告别高成本、低效率，让AI为您打造专属广告视频，驱动更高转化！',
-    heroButton: '查看样本视频',
+    heroTitle: 'AI驱动的谷歌广告素材制作工具',
+    heroSubtitle: '用先进的AI技术将您的想法转化为令人惊艳的素材',
+    heroDescription: '告别高成本、低效率，让AI为您打造专属广告素材，驱动更高转化！',
+    heroButton: '查看样本素材',
     heroSubButton: '观看演示',
-    heroTechNote: '🚀 基于 Runway Gen-4 技术，生成符合谷歌广告规范的高质量视频素材',
+    heroTechNote: '🚀 基于 Runway Gen-4o 技术，生成符合谷歌广告规范的高质量营销素材',
     
     // Features Section
-    featuresTitle: '为什么选择我们的AI视频工具？',
-    featuresSubtitle: '我们解决传统广告视频制作的所有痛点，让您专注于业务增长',
+    featuresTitle: '为什么选择我们的AI素材工具？',
+    featuresSubtitle: '我们解决传统广告素材制作的所有痛点，让您专注于业务增长',
     aiGeneration: 'AI生成',
-    aiGenerationDesc: '使用先进AI从文本描述生成视频',
+    aiGenerationDesc: '使用先进AI从文本描述生成素材',
     templates: '丰富模板',
     templatesDesc: '数百个专业模板供选择',
     editing: '智能编辑',
@@ -225,11 +219,11 @@ export const translations: Translations = {
     // Feature Cards
     feature1: {
       title: '高转化素材',
-      description: '数据驱动的AI算法生成匹配用户心理的高转化视频素材'
+      description: '数据驱动的AI算法生成匹配用户心理的高转化营销素材'
     },
     feature2: {
       title: '成本效益',
-      description: '相比传统视频制作，成本降低90%，同时保持专业品质'
+      description: '相比传统素材制作，成本降低90%，同时保持专业品质'
     },
     feature3: {
       title: '快速迭代',
@@ -241,7 +235,7 @@ export const translations: Translations = {
     },
     feature5: {
       title: '精准定向',
-      description: '根据目标受众特征自动调整视频风格和内容策略'
+      description: '根据目标受众特征自动调整素材风格和内容策略'
     },
     feature6: {
       title: '合规保障',
@@ -274,8 +268,8 @@ export const translations: Translations = {
     },
     
     // Showcase Section
-    showcaseTitle: '高质量视频样本展示',
-    showcaseSubtitle: '基于 Runway Gen-4 技术生成的多样化视频素材，满足不同广告需求',
+    showcaseTitle: '高质量素材样本展示',
+    showcaseSubtitle: '基于 Runway Gen-4o 技术生成的多样化营销素材，满足不同广告需求',
     
     // Video Samples
     video1: {
@@ -311,23 +305,23 @@ export const translations: Translations = {
     
     // Showcase Compliance
     showcaseCompliance: {
-      title: '🎬 所有视频均符合谷歌广告规范',
-      description: '我们的 AI 系统会自动检查并确保生成的视频素材符合谷歌广告政策要求，包括内容合规性、时长限制、格式规范等，让您无需担心审核问题。'
+      title: '🎬 所有素材均符合谷歌广告规范',
+              description: '我们的 AI 系统会自动检查并确保生成的营销素材符合谷歌广告政策要求，包括内容合规性、时长限制、格式规范等，让您无需担心审核问题。'
     },
     
-    videoNotSupported: '您的浏览器不支持视频播放。',
+    videoNotSupported: '您的浏览器不支持素材播放。',
     
     // Form Section
     formTitle: '告诉我们您的需求',
-    formSubtitle: '填写以下表单，我们将为您提供个性化的 AI 视频解决方案',
+    formSubtitle: '填写以下表单，我们将为您提供个性化的 AI 素材解决方案',
     name: '姓名/公司名称',
     email: '邮箱地址',
     namePlaceholder: '请输入您的姓名或公司名称',
     emailPlaceholder: '请输入您的邮箱地址',
     challenges: '当前面临的挑战 (多选)',
-    videoTypes: '期望的视频类型 (多选)',
+
     benefits: '期望的 AI 解决方案优势 (多选)',
-    budget: '针对 15-30 秒定制视频，您愿意支付的预算？',
+    budget: '针对单个产品的营销素材，您愿意支付的预算？',
     interestInTrial: '是否愿意参与免费试用或一对一访谈？',
     trialYes: '是，我愿意参与免费试用或一对一访谈',
     trialNo: '否，我只想提交我的需求',
@@ -337,12 +331,12 @@ export const translations: Translations = {
     
     // Form Placeholders
     otherChallengesPlaceholder: '请详细描述您面临的其他挑战...',
-    otherVideoTypesPlaceholder: '请描述您期望的其他视频类型...',
+
     otherBenefitsPlaceholder: '请描述您期望的其他优势...',
     
     // Footer
-    footerText: '© 2024 AI视频工具。保留所有权利。',
-    footerDescription: '通过 AI 技术革新广告视频制作，让每个品牌都能拥有专业级的视频素材。',
+    footerText: '© 2025 AI素材工具。保留所有权利。',
+    footerDescription: '通过 AI 技术革新广告素材制作，让每个品牌都能拥有专业级的营销素材。',
     madeWith: 'Made with',
     forCreators: 'for creators',
     quickLinks: '快速链接',
@@ -365,13 +359,7 @@ export const translations: Translations = {
       quality: '质量问题',
       other: '其他'
     },
-    videoTypesOptions: {
-      marketing: '营销视频',
-      training: '培训视频',
-      entertainment: '娱乐',
-      education: '教育内容',
-      other: '其他'
-    },
+
     benefitsOptions: {
       efficiency: '提高效率',
       quality: '更好质量',

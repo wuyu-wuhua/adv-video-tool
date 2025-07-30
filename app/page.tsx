@@ -1,7 +1,7 @@
 import Header from '@/components/Header'
 import HeroSection from '@/components/HeroSection'
 import FeaturesSection from '@/components/FeaturesSection'
-import VideoShowcase from '@/components/VideoShowcase'
+import MaterialShowcase from '@/components/MaterialShowcase'
 import DemandForm from '@/components/DemandForm'
 import Footer from '@/components/Footer'
 
@@ -11,7 +11,7 @@ export default function Home() {
       <Header />
       <HeroSection />
       <FeaturesSection />
-      <VideoShowcase />
+      <MaterialShowcase />
       <DemandForm />
       <Footer />
     </main>

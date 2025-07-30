@@ -6,7 +6,6 @@ export interface DemandFormData {
   name?: string
   email: string
   challenges?: string[]
-  videoTypes?: string[]
   benefits?: string[]
   budget?: string
   interestInTrial?: boolean
@@ -164,13 +163,7 @@ export function validateFormData(data: any): ValidationError[] {
     })
   }
 
-  // 验证视频类型
-  if (data.videoTypes && !Array.isArray(data.videoTypes)) {
-    errors.push({
-      field: 'videoTypes',
-      message: '视频类型选项格式不正确'
-    })
-  }
+
 
   // 验证优势
   if (data.benefits && !Array.isArray(data.benefits)) {

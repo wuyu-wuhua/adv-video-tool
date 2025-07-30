@@ -15,12 +15,10 @@ interface FormData {
   name: string
   email: string
   challenges: string[]
-  videoTypes: string[]
   benefits: string[]
   budget: string
   trialInterest: string
   otherChallenges: string
-  otherVideoTypes: string
   otherBenefits: string
 }
 
@@ -31,12 +29,10 @@ export default function DemandForm() {
     name: '',
     email: '',
     challenges: [],
-    videoTypes: [],
     benefits: [],
     budget: '',
     trialInterest: '',
     otherChallenges: '',
-    otherVideoTypes: '',
     otherBenefits: ''
   })
 
@@ -64,13 +60,7 @@ export default function DemandForm() {
     t('challengesOptions.other')
   ]
 
-  const videoTypeOptions = [
-    t('videoTypesOptions.marketing'),
-    t('videoTypesOptions.training'),
-    t('videoTypesOptions.entertainment'),
-    t('videoTypesOptions.education'),
-    t('videoTypesOptions.other')
-  ]
+
 
   const benefitOptions = [
     t('benefitsOptions.efficiency'),
@@ -115,10 +105,6 @@ export default function DemandForm() {
         ? [...formData.challenges.filter(c => c !== '其他'), formData.otherChallenges]
         : formData.challenges.filter(c => c !== '其他')
 
-      const processedVideoTypes = formData.videoTypes.includes('其他') && formData.otherVideoTypes
-        ? [...formData.videoTypes.filter(v => v !== '其他'), formData.otherVideoTypes]
-        : formData.videoTypes.filter(v => v !== '其他')
-
       const processedBenefits = formData.benefits.includes('其他') && formData.otherBenefits
         ? [...formData.benefits.filter(b => b !== '其他'), formData.otherBenefits]
         : formData.benefits.filter(b => b !== '其他')
@@ -128,7 +114,6 @@ export default function DemandForm() {
         name: formData.name || undefined,
         email: formData.email,
         challenges: processedChallenges.length > 0 ? processedChallenges : undefined,
-        videoTypes: processedVideoTypes.length > 0 ? processedVideoTypes : undefined,
         benefits: processedBenefits.length > 0 ? processedBenefits : undefined,
         budget: formData.budget || undefined,
         interestInTrial: formData.trialInterest === 'yes'
@@ -145,12 +130,10 @@ export default function DemandForm() {
         name: '',
         email: '',
         challenges: [],
-        videoTypes: [],
         benefits: [],
         budget: '',
         trialInterest: '',
         otherChallenges: '',
-        otherVideoTypes: '',
         otherBenefits: ''
       })
       } else {
@@ -233,32 +216,6 @@ export default function DemandForm() {
               )}
             </div>
 
-            {/* 期望视频类型 */}
-            <div>
-              <Label className="text-base font-semibold">{t('videoTypes')} (多选)</Label>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                {videoTypeOptions.map((option) => (
-                  <div key={option} className="flex items-center space-x-2">
-                    <Checkbox
-                      id={`videoType-${option}`}
-                      checked={formData.videoTypes.includes(option)}
-                      onCheckedChange={() => handleCheckboxChange('videoTypes', option)}
-                    />
-                    <Label htmlFor={`videoType-${option}`} className="text-sm">
-                      {option}
-                    </Label>
-                  </div>
-                ))}
-              </div>
-              {formData.videoTypes.includes(t('videoTypesOptions.other')) && (
-                <Textarea
-                  className="mt-4"
-                  placeholder={t('otherVideoTypesPlaceholder')}
-                  value={formData.otherVideoTypes}
-                  onChange={(e) => setFormData(prev => ({ ...prev, otherVideoTypes: e.target.value }))}
-                />
-              )}
-            </div>
 
             {/* 期望的 AI 解决方案优势 */}
             <div>

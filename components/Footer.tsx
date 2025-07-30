@@ -9,12 +9,12 @@ export default function Footer() {
   return (
     <footer className="bg-gray-900 text-white py-12 px-4">
       <div className="container mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Logo 和描述 */}
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
               <Video className="w-8 h-8 text-blue-400" />
-              <span className="text-xl font-bold">AI Video Tool</span>
+              <span className="text-xl font-bold">AI素材工具</span>
             </div>
             <p className="text-gray-400 leading-relaxed">
               {t('footerDescription')}
@@ -26,60 +26,51 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* 快速链接 */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">{t('quickLinks')}</h3>
-            <ul className="space-y-2">
-              <li>
+          {/* 导航和联系 */}
+          <div className="space-y-6">
+            {/* 快速导航 */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">{t('quickLinks')}</h3>
+              <div className="grid grid-cols-2 gap-2">
                 <button 
                   onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                  className="text-gray-400 hover:text-white transition-colors"
+                  className="text-gray-400 hover:text-white transition-colors text-left"
                 >
                   {t('home')}
                 </button>
-              </li>
-              <li>
                 <button 
                   onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="text-gray-400 hover:text-white transition-colors"
+                  className="text-gray-400 hover:text-white transition-colors text-left"
                 >
                   {t('features')}
                 </button>
-              </li>
-              <li>
                 <button 
                   onClick={() => document.getElementById('showcase')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="text-gray-400 hover:text-white transition-colors"
+                  className="text-gray-400 hover:text-white transition-colors text-left"
                 >
                   {t('showcase')}
                 </button>
-              </li>
-              <li>
                 <button 
                   onClick={() => document.getElementById('form')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="text-gray-400 hover:text-white transition-colors"
+                  className="text-gray-400 hover:text-white transition-colors text-left"
                 >
                   {t('demand')}
                 </button>
-              </li>
-            </ul>
-          </div>
+              </div>
+            </div>
 
-          {/* 联系方式 */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">{t('contactUs')}</h3>
+            {/* 联系方式 */}
             <div className="space-y-2">
+              <h3 className="text-lg font-semibold">{t('contactUs')}</h3>
               <div className="flex items-center space-x-2 text-gray-400">
                 <Mail className="w-4 h-4" />
                 <a 
-                  href="mailto:contact@aivideotool.com" 
+                  href="mailto:contact@aimaterialtool.com" 
                   className="hover:text-white transition-colors"
                 >
-                  contact@aivideotool.com
+                  contact@aimaterialtool.com
                 </a>
               </div>
-            </div>
-            <div className="pt-4">
               <p className="text-gray-400 text-sm">
                 {t('workingHours')}
               </p>

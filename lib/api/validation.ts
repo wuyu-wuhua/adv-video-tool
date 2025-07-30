@@ -22,7 +22,6 @@ export const demandFormSchema = z.object({
   name: nameSchema,
   email: emailSchema,
   challenges: z.array(z.string()).optional(),
-  videoTypes: z.array(z.string()).optional(),
   benefits: z.array(z.string()).optional(),
   budget: z.string().optional(),
   interestInTrial: z.boolean().optional()
@@ -176,7 +175,6 @@ export function transformFormDataToDatabase(data: z.infer<typeof demandFormSchem
     name: data.name || null,
     email: data.email,
     challenges: data.challenges || null,
-    video_types: data.videoTypes || null,
     benefits: data.benefits || null,
     budget: data.budget || null,
     interest_in_trial: data.interestInTrial || null
@@ -189,7 +187,6 @@ export function transformDatabaseDataToForm(data: any) {
     name: data.name || '',
     email: data.email,
     challenges: data.challenges || [],
-    videoTypes: data.video_types || [],
     benefits: data.benefits || [],
     budget: data.budget || '',
     interestInTrial: data.interest_in_trial || false

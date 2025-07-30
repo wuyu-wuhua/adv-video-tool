@@ -142,7 +142,6 @@ export interface TranslationKeys {
   namePlaceholder: string
   emailPlaceholder: string
   challenges: string
-  videoTypes: string
   benefits: string
   budget: string
   interestInTrial: string
@@ -154,7 +153,6 @@ export interface TranslationKeys {
 
   // Form Placeholders
   otherChallengesPlaceholder: string
-  otherVideoTypesPlaceholder: string
   otherBenefitsPlaceholder: string
 
   // Footer
@@ -182,13 +180,7 @@ export interface TranslationKeys {
     quality: string
     other: string
   }
-  videoTypesOptions: {
-    marketing: string
-    training: string
-    entertainment: string
-    education: string
-    other: string
-  }
+
   benefitsOptions: {
     efficiency: string
     quality: string
