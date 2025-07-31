@@ -3,7 +3,12 @@ import { NextRequest, NextResponse } from 'next/server'
 import { withAuth } from '@/lib/auth/middleware'
 import { generateCopyText } from '@/lib/ai/copytext-generator'
 import { processImagesForAllSizes } from '@/lib/image/processor'
-import { uploadFile, downloadFileFromUrl, generateUniqueFilename, STORAGE_BUCKETS } from '@/lib/storage/supabase-storage'
+import {
+  uploadFile,
+  downloadFileFromUrl,
+  generateUniqueFilename,
+  STORAGE_BUCKETS,
+} from '@/lib/storage/supabase-storage'
 import { createServerSupabaseClient } from '@/lib/database/server'
 import type { GenerationHistory, BrandInfo, AdGenerationRequest } from '@/lib/database/types'
 
@@ -15,42 +20,39 @@ interface GenerationResponse {
 }
 
 // 处理广告生成请求
-async function handleAdGeneration(
-  request: NextRequest, 
-  user: { id: string; email: string }
-): Promise<NextResponse> {
+async function handleAdGeneration(request: NextRequest, user: { id: string; email: string }): Promise<NextResponse> {
   try {
-    const body = await request.json() as AdGenerationRequest
+    const body = (await request.json()) as AdGenerationRequest
 
     // 验证请求数据
     if (!body.imageUrls || body.imageUrls.length === 0) {
       return NextResponse.json(
-        { 
-          success: false, 
-          error: 'No image URLs provided' 
+        {
+          success: false,
+          error: 'No image URLs provided',
         } as GenerationResponse,
-        { status: 400 }
+        { status: 400 },
       )
     }
 
     if (!body.adPurpose || body.adPurpose.trim().length === 0) {
       return NextResponse.json(
-        { 
-          success: false, 
-          error: 'Ad purpose is required' 
+        {
+          success: false,
+          error: 'Ad purpose is required',
         } as GenerationResponse,
-        { status: 400 }
+        { status: 400 },
       )
     }
 
     // 限制图片数量
     if (body.imageUrls.length > 5) {
       return NextResponse.json(
-        { 
-          success: false, 
-          error: 'Maximum 5 images allowed per generation' 
+        {
+          success: false,
+          error: 'Maximum 5 images allowed per generation',
         } as GenerationResponse,
-        { status: 400 }
+        { status: 400 },
       )
     }
 
@@ -63,7 +65,6 @@ async function handleAdGeneration(
       ad_purpose: body.adPurpose,
       brand_info: body.brandInfo || {},
       generated_ad_urls: [],
-      status: 'processing'
     }
 
     const { data: generation, error: insertError } = await supabase
@@ -75,11 +76,11 @@ async function handleAdGeneration(
     if (insertError || !generation) {
       console.error('Failed to create generation record:', insertError)
       return NextResponse.json(
-        { 
-          success: false, 
-          error: 'Failed to create generation record' 
+        {
+          success: false,
+          error: 'Failed to create generation record',
         } as GenerationResponse,
-        { status: 500 }
+        { status: 500 },
       )
     }
 
@@ -91,17 +92,16 @@ async function handleAdGeneration(
     return NextResponse.json({
       success: true,
       generationId: generation.id,
-      message: 'Generation started. You will be notified when complete.'
+      message: 'Generation started. You will be notified when complete.',
     } as GenerationResponse)
-
   } catch (error) {
     console.error('Generation API error:', error)
     return NextResponse.json(
-      { 
-        success: false, 
-        error: error instanceof Error ? error.message : 'Generation service error' 
+      {
+        success: false,
+        error: error instanceof Error ? error.message : 'Generation service error',
       } as GenerationResponse,
-      { status: 500 }
+      { status: 500 },
     )
   }
 }
@@ -110,7 +110,7 @@ async function handleAdGeneration(
 async function processGenerationAsync(
   generationId: string,
   request: AdGenerationRequest,
-  userId: string
+  userId: string,
 ): Promise<void> {
   const supabase = await createServerSupabaseClient()
 
@@ -121,7 +121,7 @@ async function processGenerationAsync(
     console.log('Generating copy text...')
     const copyResult = await generateCopyText({
       adPurpose: request.adPurpose,
-      brandInfo: request.brandInfo || {}
+      brandInfo: request.brandInfo || {},
     })
 
     if (!copyResult.success || copyResult.copies.length === 0) {
@@ -152,18 +152,11 @@ async function processGenerationAsync(
         }
 
         // 处理图片生成所有尺寸的广告
-        const processedImages = await processImagesForAllSizes(
-          imageBuffer,
-          copyResult.copies,
-          logoBuffer
-        )
+        const processedImages = await processImagesForAllSizes(imageBuffer, copyResult.copies, logoBuffer)
 
         // 上传处理后的图片
         for (const processedImage of processedImages) {
-          const filename = generateUniqueFilename(
-            `ad-${processedImage.size.name}-${i}.jpg`,
-            userId
-          )
+          const filename = generateUniqueFilename(`ad-${processedImage.size.name}-${i}.jpg`, userId)
 
           // 这里需要实际的图片Buffer，暂时使用占位符
           // 在实际实现中，processImagesForAllSizes应该返回Buffer
@@ -171,7 +164,7 @@ async function processGenerationAsync(
             bucket: STORAGE_BUCKETS.PROCESSED_ADS,
             path: filename,
             file: imageBuffer, // 这里应该是处理后的图片Buffer
-            contentType: 'image/jpeg'
+            contentType: 'image/jpeg',
           })
 
           if (uploadResult.success && uploadResult.url) {
@@ -179,7 +172,7 @@ async function processGenerationAsync(
               url: uploadResult.url,
               size: processedImage.size.name,
               format: processedImage.format,
-              copytext: processedImage.copytext
+              copytext: processedImage.copytext,
             })
           }
         }
@@ -193,8 +186,6 @@ async function processGenerationAsync(
       .from('generation_history')
       .update({
         generated_ad_urls: allGeneratedAds,
-        status: 'completed',
-        updated_at: new Date().toISOString()
       })
       .eq('id', generationId)
 
@@ -203,18 +194,10 @@ async function processGenerationAsync(
     } else {
       console.log(`Generation ${generationId} completed successfully with ${allGeneratedAds.length} ads`)
     }
-
   } catch (error) {
     console.error(`Generation ${generationId} failed:`, error)
-
-    // 更新状态为失败
-    await supabase
-      .from('generation_history')
-      .update({
-        status: 'failed',
-        updated_at: new Date().toISOString()
-      })
-      .eq('id', generationId)
+    // 注意：由于移除了status字段，这里不再更新失败状态
+    // 可以通过generated_ad_urls是否为空来判断是否生成成功
   }
 }
 
@@ -223,22 +206,13 @@ export const POST = withAuth(handleAdGeneration)
 
 // 处理其他HTTP方法
 export async function GET() {
-  return NextResponse.json(
-    { error: 'Method not allowed' },
-    { status: 405 }
-  )
+  return NextResponse.json({ error: 'Method not allowed' }, { status: 405 })
 }
 
 export async function PUT() {
-  return NextResponse.json(
-    { error: 'Method not allowed' },
-    { status: 405 }
-  )
+  return NextResponse.json({ error: 'Method not allowed' }, { status: 405 })
 }
 
 export async function DELETE() {
-  return NextResponse.json(
-    { error: 'Method not allowed' },
-    { status: 405 }
-  )
+  return NextResponse.json({ error: 'Method not allowed' }, { status: 405 })
 }

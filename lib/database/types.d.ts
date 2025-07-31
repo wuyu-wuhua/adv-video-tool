@@ -132,9 +132,7 @@ export type GenerationHistory = {
       cta: string
     }
   }[]
-  status: 'pending' | 'processing' | 'completed' | 'failed'
   created_at: string
-  updated_at: string
 }
 
 // 广告尺寸配置

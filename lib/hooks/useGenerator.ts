@@ -122,55 +122,72 @@ export function useGenerator() {
         throw new Error('广告生成请求失败')
       }
 
-      // 第三步：轮询检查生成状态
+      // 第三步：等待生成完成并获取结果
       console.log('⏳ 正在生成广告素材，请稍候...')
       const generationId = generateResult.generationId
-      let attempts = 0
-      const maxAttempts = 60 // 最多等待5分钟（每5秒检查一次）
 
-      while (attempts < maxAttempts) {
-        await new Promise(resolve => setTimeout(resolve, 5000)) // 等待5秒
-        attempts++
+      // 等待一段时间让后端处理完成（AI生成需要更长时间）
+      await new Promise(resolve => setTimeout(resolve, 30000)) // 等待30秒
 
-        const statusResponse = await fetch(`/api/generation-status/${generationId}`)
-        if (!statusResponse.ok) {
-          console.warn('状态检查失败，继续等待...')
-          continue
-        }
+      // 获取生成结果（带重试机制）
+      let historyResult: any = null
+      let retryCount = 0
+      const maxRetries = 3
 
-        const statusResult = await statusResponse.json()
-        console.log(`📊 生成状态 (${attempts}/${maxAttempts}):`, statusResult)
+      while (retryCount < maxRetries) {
+        try {
+          console.log(`📊 尝试获取生成结果 (${retryCount + 1}/${maxRetries})...`)
 
-        if (statusResult.status === 'completed') {
-          // 获取完整的生成结果
           const historyResponse = await fetch(`/api/generation-history/${generationId}`)
-          if (historyResponse.ok) {
-            const historyResult = await historyResponse.json()
-            if (historyResult.success && historyResult.data) {
-              const generatedAds = historyResult.data.generated_ad_urls.map((ad: any, index: number) => ({
-                id: `${generationId}-${index}`,
-                imageUrl: ad.url,
-                aspectRatio: ad.size === 'landscape' ? '1.91:1' : ad.size === 'square' ? '1:1' : '4:5',
-                dimensions: ad.size === 'landscape' ? '1200x628' : ad.size === 'square' ? '1200x1200' : '960x1200',
-                downloadUrl: ad.url,
-                copytext: ad.copytext,
-              }))
+          if (!historyResponse.ok) {
+            throw new Error(`HTTP ${historyResponse.status}: 获取生成结果失败`)
+          }
 
-              setGeneratedAds(generatedAds)
-              console.log('🎉 广告生成完成！', generatedAds)
-              return
+          const result = await historyResponse.json()
+          if (!result.success || !result.data) {
+            throw new Error('生成结果获取失败')
+          }
+
+          // 检查是否有生成的广告
+          if (result.data.generated_ad_urls && result.data.generated_ad_urls.length > 0) {
+            historyResult = result
+            break
+          } else {
+            console.log('⏳ 广告还在生成中，等待更长时间...')
+            if (retryCount < maxRetries - 1) {
+              await new Promise(resolve => setTimeout(resolve, 15000)) // 再等待15秒
             }
           }
-          break
-        } else if (statusResult.status === 'failed') {
-          throw new Error('广告生成失败，请重试')
+        } catch (error) {
+          console.error(`获取结果失败 (尝试 ${retryCount + 1}):`, error)
+          if (retryCount < maxRetries - 1) {
+            await new Promise(resolve => setTimeout(resolve, 10000)) // 等待10秒后重试
+          }
         }
-        // 如果状态是 pending 或 processing，继续等待
+
+        retryCount++
       }
 
-      if (attempts >= maxAttempts) {
-        throw new Error('广告生成超时，请稍后查看生成历史')
+      if (
+        !historyResult ||
+        !historyResult.data.generated_ad_urls ||
+        historyResult.data.generated_ad_urls.length === 0
+      ) {
+        throw new Error('广告生成超时或失败，请稍后查看生成历史或重试')
       }
+
+      // 转换生成结果为前端格式
+      const generatedAds = historyResult.data.generated_ad_urls.map((ad: any, index: number) => ({
+        id: `${generationId}-${index}`,
+        imageUrl: ad.url,
+        aspectRatio: ad.size === 'landscape' ? '1.91:1' : ad.size === 'square' ? '1:1' : '4:5',
+        dimensions: ad.size === 'landscape' ? '1200x628' : ad.size === 'square' ? '1200x1200' : '960x1200',
+        downloadUrl: ad.url,
+        copytext: ad.copytext,
+      }))
+
+      setGeneratedAds(generatedAds)
+      console.log('🎉 广告生成完成！', generatedAds)
 
       // 模拟生成结果（备用，如果API调用失败）
       // const mockResults: GeneratedAd[] = [

@@ -8,11 +8,8 @@ import { initializeStorageBuckets } from '@/lib/storage/supabase-storage'
 async function checkTableExists(): Promise<boolean> {
   try {
     const supabase = createBrowserSupabaseClient()
-    const { data, error } = await supabase
-      .from(DATABASE_TABLES.DEMANDS)
-      .select('id')
-      .limit(1)
-    
+    const { data, error } = await supabase.from(DATABASE_TABLES.DEMANDS).select('id').limit(1)
+
     return !error
   } catch {
     return false
@@ -23,10 +20,10 @@ async function checkTableExists(): Promise<boolean> {
 async function createTableWithSSR(): Promise<boolean> {
   try {
     const supabaseAdmin = createAdminSupabaseClient()
-    
+
     // 使用PostgreSQL扩展执行SQL
     const { error: tableError } = await supabaseAdmin.rpc('exec_sql', {
-      sql: DATABASE_INIT_CONFIG.CREATE_TABLE_SQL
+      sql: DATABASE_INIT_CONFIG.CREATE_TABLE_SQL,
     })
 
     if (tableError) {
@@ -36,7 +33,7 @@ async function createTableWithSSR(): Promise<boolean> {
 
     // 创建RLS策略
     const { error: policyError } = await supabaseAdmin.rpc('exec_sql', {
-      sql: DATABASE_INIT_CONFIG.CREATE_POLICIES_SQL
+      sql: DATABASE_INIT_CONFIG.CREATE_POLICIES_SQL,
     })
 
     if (policyError) {
@@ -56,12 +53,9 @@ async function createTableWithSSR(): Promise<boolean> {
 async function createTableWithHTTP(): Promise<boolean> {
   try {
     const supabaseAdmin = createAdminSupabaseClient()
-    
+
     // 创建表
-    const { error: tableError } = await supabaseAdmin
-      .from(DATABASE_TABLES.DEMANDS)
-      .select('id')
-      .limit(1)
+    const { error: tableError } = await supabaseAdmin.from(DATABASE_TABLES.DEMANDS).select('id').limit(1)
 
     if (tableError && tableError.code === 'PGRST116') {
       // 表不存在，尝试创建
@@ -80,12 +74,9 @@ async function createTableWithHTTP(): Promise<boolean> {
 async function createTableWithServiceKey(): Promise<boolean> {
   try {
     const supabaseAdmin = createAdminSupabaseClient()
-    
+
     // 检查表是否存在
-    const { data, error } = await supabaseAdmin
-      .from(DATABASE_TABLES.DEMANDS)
-      .select('id')
-      .limit(1)
+    const { data, error } = await supabaseAdmin.from(DATABASE_TABLES.DEMANDS).select('id').limit(1)
 
     if (error && error.code === 'PGRST116') {
       console.log('📋 Table does not exist, creating...')
@@ -103,10 +94,7 @@ async function createTableWithServiceKey(): Promise<boolean> {
 async function checkGenerationHistoryTableExists(): Promise<boolean> {
   try {
     const supabase = createBrowserSupabaseClient()
-    const { data, error } = await supabase
-      .from('generation_history')
-      .select('id')
-      .limit(1)
+    const { data, error } = await supabase.from('generation_history').select('id').limit(1)
 
     return !error
   } catch {
@@ -119,53 +107,58 @@ async function createGenerationHistoryTable(): Promise<boolean> {
   try {
     const supabaseAdmin = createAdminSupabaseClient()
 
-    // 创建表的SQL
-    const createTableSQL = `
-      CREATE TABLE IF NOT EXISTS generation_history (
-        id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-        user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-        input_image_urls JSONB NOT NULL DEFAULT '[]',
-        ad_purpose TEXT NOT NULL,
-        brand_info JSONB NOT NULL DEFAULT '{}',
-        generated_ad_urls JSONB NOT NULL DEFAULT '[]',
-        status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'processing', 'completed', 'failed')),
-        created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-        updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-      );
+    // 先检查表是否已存在
+    const { data: existingTable, error: checkError } = await supabaseAdmin
+      .from('generation_history')
+      .select('id')
+      .limit(1)
 
-      -- 创建索引
-      CREATE INDEX IF NOT EXISTS idx_generation_history_user_id ON generation_history(user_id);
-      CREATE INDEX IF NOT EXISTS idx_generation_history_status ON generation_history(status);
-      CREATE INDEX IF NOT EXISTS idx_generation_history_created_at ON generation_history(created_at);
-
-      -- 启用RLS
-      ALTER TABLE generation_history ENABLE ROW LEVEL SECURITY;
-
-      -- 创建RLS策略
-      CREATE POLICY "Users can view their own generation history" ON generation_history
-        FOR SELECT USING (auth.uid() = user_id);
-
-      CREATE POLICY "Users can insert their own generation history" ON generation_history
-        FOR INSERT WITH CHECK (auth.uid() = user_id);
-
-      CREATE POLICY "Users can update their own generation history" ON generation_history
-        FOR UPDATE USING (auth.uid() = user_id);
-
-      CREATE POLICY "Users can delete their own generation history" ON generation_history
-        FOR DELETE USING (auth.uid() = user_id);
-    `
-
-    const { error } = await supabaseAdmin.rpc('exec_sql', {
-      sql: createTableSQL
-    })
-
-    if (error) {
-      console.error('Failed to create generation_history table:', error)
-      return false
+    if (!checkError) {
+      console.log('✅ Generation history table already exists')
+      return true
     }
 
-    console.log('✅ Generation history table created successfully')
-    return true
+    console.log('📋 Creating generation_history table...')
+
+    // 由于不能直接执行DDL，我们需要通过Supabase控制台或者SQL编辑器手动创建表
+    // 这里提供创建表的SQL供手动执行
+    const createTableSQL = `
+-- 创建广告生成历史表
+CREATE TABLE IF NOT EXISTS generation_history (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  input_image_urls JSONB NOT NULL DEFAULT '[]',
+  ad_purpose TEXT NOT NULL,
+  brand_info JSONB NOT NULL DEFAULT '{}',
+  generated_ad_urls JSONB NOT NULL DEFAULT '[]',
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 创建索引
+CREATE INDEX IF NOT EXISTS idx_generation_history_user_id ON generation_history(user_id);
+CREATE INDEX IF NOT EXISTS idx_generation_history_created_at ON generation_history(created_at);
+
+-- 启用RLS
+ALTER TABLE generation_history ENABLE ROW LEVEL SECURITY;
+
+-- 创建RLS策略
+CREATE POLICY "Users can view their own generation history" ON generation_history
+  FOR SELECT USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can insert their own generation history" ON generation_history
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can update their own generation history" ON generation_history
+  FOR UPDATE USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can delete their own generation history" ON generation_history
+  FOR DELETE USING (auth.uid() = user_id);
+    `
+
+    console.log('❌ Cannot create table automatically. Please execute the following SQL in Supabase SQL Editor:')
+    console.log(createTableSQL)
+
+    return false
   } catch (error) {
     console.error('Create generation history table error:', error)
     return false
@@ -187,7 +180,7 @@ export async function initializeDatabase(): Promise<boolean> {
     const methods = [
       { name: 'Service Key', fn: createTableWithServiceKey },
       { name: 'HTTP API', fn: createTableWithHTTP },
-      { name: 'SSR', fn: createTableWithSSR }
+      { name: 'SSR', fn: createTableWithSSR },
     ]
 
     let tableCreated = false
@@ -240,17 +233,13 @@ export class DatabaseService {
   // 插入需求
   async insertDemand(demand: Demand): Promise<DatabaseResponse<Demand>> {
     try {
-      const { data, error } = await this.supabase
-        .from(DATABASE_TABLES.DEMANDS)
-        .insert([demand])
-        .select()
-        .single()
+      const { data, error } = await this.supabase.from(DATABASE_TABLES.DEMANDS).insert([demand]).select().single()
 
       if (error) {
         if (error.code === '23505') {
           return {
             data: null,
-            error: { message: ERROR_MESSAGES.EMAIL_ALREADY_EXISTS }
+            error: { message: ERROR_MESSAGES.EMAIL_ALREADY_EXISTS },
           }
         }
         return { data: null, error }
@@ -260,7 +249,7 @@ export class DatabaseService {
     } catch (error) {
       return {
         data: null,
-        error: { message: ERROR_MESSAGES.DATABASE_ERROR }
+        error: { message: ERROR_MESSAGES.DATABASE_ERROR },
       }
     }
   }
@@ -306,7 +295,7 @@ export class DatabaseService {
         total,
         page,
         pageSize: limit,
-        totalPages
+        totalPages,
       }
     } catch (error) {
       return {
@@ -314,8 +303,8 @@ export class DatabaseService {
         total: 0,
         page: 1,
         pageSize: limit,
-        totalPages: 0
+        totalPages: 0,
       }
     }
   }
-} 
+}

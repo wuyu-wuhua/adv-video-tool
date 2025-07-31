@@ -18,7 +18,7 @@ export function getAIConfig(): AIConfig {
   if (process.env.OPENAI_API_KEY) {
     config.openai = {
       apiKey: process.env.OPENAI_API_KEY,
-      model: 'gpt-4o'
+      model: 'gpt-4o',
     }
   }
 
@@ -26,7 +26,7 @@ export function getAIConfig(): AIConfig {
   if (process.env.GOOGLE_GEMINI_API_KEY) {
     config.gemini = {
       apiKey: process.env.GOOGLE_GEMINI_API_KEY,
-      model: 'gemini-pro'
+      model: 'gemini-pro',
     }
   }
 
@@ -41,17 +41,24 @@ export function hasAvailableAIService(): boolean {
 
 // 获取首选的AI服务
 export function getPreferredAIService(): 'openai' | 'gemini' | null {
+  // 检查是否禁用AI服务（用于调试或网络问题）
+  const disableAI = process.env.DISABLE_AI_SERVICES === 'true'
+  if (disableAI) {
+    console.log('🚫 AI services disabled by environment variable')
+    return null
+  }
+
   const config = getAIConfig()
-  
+
   // 优先使用 OpenAI
   if (config.openai) {
     return 'openai'
   }
-  
+
   // 其次使用 Gemini
   if (config.gemini) {
     return 'gemini'
   }
-  
+
   return null
 }
