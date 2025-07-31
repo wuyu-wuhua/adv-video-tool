@@ -1,7 +1,8 @@
 import { createAdminSupabaseClient, createBrowserSupabaseClient } from './client'
 import { DATABASE_TABLES, DATABASE_INIT_CONFIG } from './config'
-import type { Demand, DatabaseResponse, PaginatedResponse } from './types'
+import type { Demand, DatabaseResponse, PaginatedResponse, GenerationHistory } from './types'
 import { ERROR_MESSAGES } from '@/lib/core/constants'
+import { initializeStorageBuckets } from '@/lib/storage/supabase-storage'
 
 // 检查表是否存在
 async function checkTableExists(): Promise<boolean> {
@@ -98,6 +99,79 @@ async function createTableWithServiceKey(): Promise<boolean> {
   }
 }
 
+// 检查广告生成历史表是否存在
+async function checkGenerationHistoryTableExists(): Promise<boolean> {
+  try {
+    const supabase = createBrowserSupabaseClient()
+    const { data, error } = await supabase
+      .from('generation_history')
+      .select('id')
+      .limit(1)
+
+    return !error
+  } catch {
+    return false
+  }
+}
+
+// 创建广告生成历史表
+async function createGenerationHistoryTable(): Promise<boolean> {
+  try {
+    const supabaseAdmin = createAdminSupabaseClient()
+
+    // 创建表的SQL
+    const createTableSQL = `
+      CREATE TABLE IF NOT EXISTS generation_history (
+        id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+        user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+        input_image_urls JSONB NOT NULL DEFAULT '[]',
+        ad_purpose TEXT NOT NULL,
+        brand_info JSONB NOT NULL DEFAULT '{}',
+        generated_ad_urls JSONB NOT NULL DEFAULT '[]',
+        status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'processing', 'completed', 'failed')),
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+      );
+
+      -- 创建索引
+      CREATE INDEX IF NOT EXISTS idx_generation_history_user_id ON generation_history(user_id);
+      CREATE INDEX IF NOT EXISTS idx_generation_history_status ON generation_history(status);
+      CREATE INDEX IF NOT EXISTS idx_generation_history_created_at ON generation_history(created_at);
+
+      -- 启用RLS
+      ALTER TABLE generation_history ENABLE ROW LEVEL SECURITY;
+
+      -- 创建RLS策略
+      CREATE POLICY "Users can view their own generation history" ON generation_history
+        FOR SELECT USING (auth.uid() = user_id);
+
+      CREATE POLICY "Users can insert their own generation history" ON generation_history
+        FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+      CREATE POLICY "Users can update their own generation history" ON generation_history
+        FOR UPDATE USING (auth.uid() = user_id);
+
+      CREATE POLICY "Users can delete their own generation history" ON generation_history
+        FOR DELETE USING (auth.uid() = user_id);
+    `
+
+    const { error } = await supabaseAdmin.rpc('exec_sql', {
+      sql: createTableSQL
+    })
+
+    if (error) {
+      console.error('Failed to create generation_history table:', error)
+      return false
+    }
+
+    console.log('✅ Generation history table created successfully')
+    return true
+  } catch (error) {
+    console.error('Create generation history table error:', error)
+    return false
+  }
+}
+
 // 初始化数据库
 export async function initializeDatabase(): Promise<boolean> {
   console.log('🚀 Initializing database...')
@@ -106,29 +180,57 @@ export async function initializeDatabase(): Promise<boolean> {
   const tableExists = await checkTableExists()
   if (tableExists) {
     console.log('✅ Database table already exists')
-    return true
-  }
+  } else {
+    console.log('📋 Table does not exist, creating...')
 
-  console.log('📋 Table does not exist, creating...')
+    // 尝试不同的创建方法
+    const methods = [
+      { name: 'Service Key', fn: createTableWithServiceKey },
+      { name: 'HTTP API', fn: createTableWithHTTP },
+      { name: 'SSR', fn: createTableWithSSR }
+    ]
 
-  // 尝试不同的创建方法
-  const methods = [
-    { name: 'Service Key', fn: createTableWithServiceKey },
-    { name: 'HTTP API', fn: createTableWithHTTP },
-    { name: 'SSR', fn: createTableWithSSR }
-  ]
+    let tableCreated = false
+    for (const method of methods) {
+      console.log(`🔄 Trying ${method.name} method...`)
+      const success = await method.fn()
+      if (success) {
+        console.log(`✅ Database table created successfully using ${method.name} method`)
+        tableCreated = true
+        break
+      }
+    }
 
-  for (const method of methods) {
-    console.log(`🔄 Trying ${method.name} method...`)
-    const success = await method.fn()
-    if (success) {
-      console.log(`✅ Database initialized successfully using ${method.name} method`)
-      return true
+    if (!tableCreated) {
+      console.log('❌ All database table creation methods failed')
+      return false
     }
   }
 
-  console.log('❌ All database initialization methods failed')
-  return false
+  // 检查并创建广告生成历史表
+  const generationTableExists = await checkGenerationHistoryTableExists()
+  if (!generationTableExists) {
+    console.log('📋 Generation history table does not exist, creating...')
+    const generationTableCreated = await createGenerationHistoryTable()
+    if (!generationTableCreated) {
+      console.log('❌ Failed to create generation history table')
+      return false
+    }
+  } else {
+    console.log('✅ Generation history table already exists')
+  }
+
+  // 初始化存储桶
+  console.log('🗂️ Initializing storage buckets...')
+  const storageInitialized = await initializeStorageBuckets()
+  if (!storageInitialized) {
+    console.log('❌ Failed to initialize storage buckets')
+    return false
+  }
+  console.log('✅ Storage buckets initialized successfully')
+
+  console.log('✅ Database initialization completed successfully')
+  return true
 }
 
 // 数据库服务类

@@ -16,9 +16,5 @@ export * from './api/validation'
 // 国际化模块 - 只从主入口导出，避免重复
 export * from './i18n/index'
 
-// RunwayML模块
-export * from './runway/types'
-export * from './runway/config'
-
 // 工具函数导出
-export { cn } from './core/utils' 
+export { cn } from './core/utils'

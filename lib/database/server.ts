@@ -36,28 +36,48 @@ export async function createServerSupabaseClient() {
     throw new Error('Supabase environment variables are not configured')
   }
 
-  return createServerClient(
-    url,
-    anonKey,
-    {
-      cookies: {
-        getAll() {
-          return cookieStore.getAll()
-        },
-        setAll(cookiesToSet: CookieOptions[]) {
-          try {
-            cookiesToSet.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options),
-            )
-          } catch {
-            // The `setAll` method was called from a Server Component.
-            // This can be ignored if you have middleware refreshing
-            // user sessions.
-          }
-        },
-      } as any, // 使用any类型断言解决@supabase/ssr版本兼容性问题
+  return createServerClient(url, anonKey, {
+    cookies: {
+      getAll() {
+        return cookieStore.getAll()
+      },
+      setAll(cookiesToSet: CookieOptions[]) {
+        try {
+          cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, options))
+        } catch {
+          // The `setAll` method was called from a Server Component.
+          // This can be ignored if you have middleware refreshing
+          // user sessions.
+        }
+      },
+    } as any, // 使用any类型断言解决@supabase/ssr版本兼容性问题
+  })
+}
+
+// 创建API Routes专用的Supabase客户端
+export function createAPISupabaseClient(request: NextRequest) {
+  const url = getSupabaseUrl()
+  const anonKey = getSupabaseAnonKey()
+
+  if (!url || !anonKey) {
+    throw new Error('Supabase environment variables are not configured')
+  }
+
+  return createServerClient(url, anonKey, {
+    cookies: {
+      get(name: string) {
+        return request.cookies.get(name)?.value
+      },
+      set(name: string, value: string, options: any) {
+        // 在API Routes中，我们不能直接设置cookies
+        // 这些cookies需要在响应中设置
+        console.log('🍪 Cookie to set:', name, value)
+      },
+      remove(name: string, options: any) {
+        console.log('🍪 Cookie to remove:', name)
+      },
     },
-  )
+  })
 }
 
 // 创建中间件客户端
@@ -74,28 +94,21 @@ export function createMiddlewareSupabaseClient(request: NextRequest) {
   }
 
   return {
-    client: createServerClient(
-      url,
-      anonKey,
-      {
-        cookies: {
-          getAll() {
-            return request.cookies.getAll()
-          },
-          setAll(cookiesToSet: CookieOptions[]) {
-            cookiesToSet.forEach(({ name, value }) =>
-              request.cookies.set(name, value),
-            )
-            supabaseResponse = NextResponse.next({
-              request,
-            })
-            cookiesToSet.forEach(({ name, value, options }) =>
-              supabaseResponse.cookies.set(name, value, options),
-            )
-          },
-        } as any, // 使用any类型断言解决@supabase/ssr版本兼容性问题
+    client: createServerClient(url, anonKey, {
+      cookies: {
+        get(name: string) {
+          return request.cookies.get(name)?.value
+        },
+        set(name: string, value: string, options: any) {
+          request.cookies.set(name, value)
+          supabaseResponse.cookies.set(name, value, options)
+        },
+        remove(name: string, options: any) {
+          request.cookies.delete(name)
+          supabaseResponse.cookies.delete(name)
+        },
       },
-    ),
-    response: supabaseResponse
+    }),
+    response: supabaseResponse,
   }
-} 
+}

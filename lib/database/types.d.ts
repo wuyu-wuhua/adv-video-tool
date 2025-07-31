@@ -108,4 +108,76 @@ export type CookieOptions = {
     httpOnly?: boolean
     sameSite?: 'strict' | 'lax' | 'none'
   }
-} 
+}
+
+// 广告素材生成历史表类型
+export type GenerationHistory = {
+  id: string
+  user_id: string
+  input_image_urls: string[]
+  ad_purpose: string
+  brand_info: {
+    name?: string
+    slogan?: string
+    url?: string
+    logo_url?: string
+  }
+  generated_ad_urls: {
+    url: string
+    size: string
+    format: string
+    copytext: {
+      title: string
+      description: string
+      cta: string
+    }
+  }[]
+  status: 'pending' | 'processing' | 'completed' | 'failed'
+  created_at: string
+  updated_at: string
+}
+
+// 广告尺寸配置
+export type AdSize = {
+  name: string
+  width: number
+  height: number
+  ratio: string
+}
+
+// 文案生成结果
+export type CopyText = {
+  title: string
+  description: string
+  cta: string
+}
+
+// 图片处理结果
+export type ProcessedImage = {
+  url: string
+  size: AdSize
+  format: 'jpg' | 'png'
+  copytext: CopyText
+}
+
+// 品牌信息
+export type BrandInfo = {
+  name?: string
+  slogan?: string
+  url?: string
+  logo_url?: string
+}
+
+// 图片上传请求
+export type ImageUploadRequest = {
+  files: File[]
+  userId: string
+}
+
+// 广告生成请求
+export type AdGenerationRequest = {
+  imageUrls: string[]
+  adPurpose: string
+  brandInfo: BrandInfo
+  userId: string
+}
